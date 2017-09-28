@@ -1,0 +1,8 @@
+Feedback:
+	- Cambiar ventana "Bienvenido a MF" por la ventana para hacer la receta
+	- Utilizar un estilo de lista de contactos para nueva receta
+		Buscar paciente por rut al inicio y si no hay uno, crearlo
+	- Eliminar boton back y poner boton para imprimir en la action bar, a la dercha
+	- No hacer pdf de cada receta, el espacio ocupado es muy grande y no es necesario.
+	- Averiguar cosas positivas de usar internet y sincronización.
+	- ¿Es necesario un usuario, por que motivos?
