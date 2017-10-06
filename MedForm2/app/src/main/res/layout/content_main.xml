@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="cl.tello_urtubia.medform.MainActivity">
+
+    <TextView
+
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/inicio_rut"
+        android:textSize="24sp"
+        android:gravity="center_horizontal"
+        android:padding="16dp"
+        android:layout_gravity="center_horizontal"/>
+    <EditText
+        android:id="@+id/inicio_rut"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:hint="@string/inicio_hint_rut"
+        android:textSize="24sp"
+        android:gravity="center_horizontal"
+        android:layout_gravity="center_horizontal"/>
+    <Button
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimaryDark"
+        android:text="@string/inicio_buscarPaciente"
+        android:textColor="@color/colorAccent"
+        android:layout_marginTop="40dp"
+        android:layout_gravity="center_horizontal"
+        android:onClick="buscarPaciente"/>
+    <TextView
+        android:id="@+id/inicio_resultado"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="24sp"
+        android:gravity="center_horizontal"
+        android:layout_marginTop="100dp"
+        android:visibility="invisible"/>
+    <Button
+        android:id="@+id/boton_crearPaciente"
+        android:visibility="gone"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimaryDark"
+        android:text="@string/inicio_crearPaciente"
+        android:textColor="@color/colorAccent"
+        android:layout_marginTop="40dp"
+        android:layout_gravity="center_horizontal"
+        android:onClick="activity_crearPaciente"/>
+    <Button
+        android:id="@+id/boton_crearReceta"
+        android:visibility="gone"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimaryDark"
+        android:text="@string/inicio_crearReceta"
+        android:textColor="@color/colorAccent"
+        android:layout_marginTop="40dp"
+        android:layout_gravity="center_horizontal"
+        android:onClick="activity_crearReceta"/>
+
+</LinearLayout>

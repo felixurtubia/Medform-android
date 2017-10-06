@@ -1,0 +1,28 @@
+<resources>
+    <string name="app_name">MedForm</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_settings">Settings</string>
+
+    <!-- Página de Inicio-->
+
+    <string name="inicio_rut">Rut de Paciente</string>
+    <string name="inicio_hint_rut">xx.xxx.xxx-x</string>
+    <string name="inicio_buscarPaciente">Buscar Paciente</string>
+    <string name="inicio_pacienteNoEncontrado">Paciente no encontrado</string>
+    <string name="inicio_pacienteEncontrado">Paciente encontrado</string>
+    <string name="inicio_crearPaciente">Crear paciente</string>
+    <string name="inicio_crearReceta">Crear Receta</string>
+    <!-- Formulario -->
+    <string name="nombre_paciente">Nombre paciente</string>
+    <string name="rut_paciente">Rut</string>
+    <string name="edad">Fecha de Nacimiento </string>
+    <string name="sexo">Sexo</string>
+    <string name="direccion">Direccion</string>
+    <string name="diagnostico">Diagnóstico</string>
+    <string name="medicamento">Medicamentos</string>
+
+
+</resources>
