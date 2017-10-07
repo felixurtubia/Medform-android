@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorAccent"
+    android:orientation="vertical"
+    tools:context="cl.tello_urtubia.medform.MainActivity">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorPrimary"
+        android:elevation="4dp"
+        android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
+        app:popupTheme="@style/AppTheme.PopupOverlay" />
+
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <Button
+            android:id="@+id/lista_pacientes_button"
+            style="@style/BotonMenuInicio"
+            android:text="@string/main_ListaPacientes"
+            android:onClick="inicioOptionsSelected"/>
+
+        <Button
+            android:id="@+id/historial_recetas_button"
+            style="@style/BotonMenuInicio"
+            android:text="@string/main_HistorialRecetas"
+            android:onClick="inicioOptionsSelected"/>
+
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/main_rut"
+        android:gravity="center_horizontal"
+        android:layout_gravity="center_horizontal"
+        android:textSize="24sp"
+        android:textColor="@color/colorPrimaryDark"
+        android:paddingTop="32dp"
+        />
+    <EditText
+        android:id="@+id/main_RutPaciente_et"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:hint="@string/main_rutHint"
+        android:layout_gravity="center_horizontal"
+        android:gravity="start"
+        android:layout_margin="16dp"/>
+    <Button
+        android:id="@+id/buscar_paciente_button"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:background="@color/colorPrimaryDark"
+        android:textColor="@color/colorAccent"
+        android:text="@string/main_BuscarPaciente"
+        android:textSize="16sp"
+        android:onClick="inicioOptionsSelected"/>
+
+</LinearLayout>

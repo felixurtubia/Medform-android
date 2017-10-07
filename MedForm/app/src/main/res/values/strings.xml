@@ -1,0 +1,33 @@
+<resources>
+    <string name="app_name">MedForm</string>
+
+    <string name="action_settings">Ajustes</string>
+    <string name="action_print">Imprimir</string>
+
+    <!-- Página de Inicio-->
+
+    <string name="main_rut">Rut de Paciente</string>
+    <string name="main_rutHint">xx.xxx.xxx-x</string>
+    <string name="main_BuscarPaciente">Buscar Paciente</string>
+    <string name="main_PacienteNoEncontrado">Paciente no encontrado</string>
+    <string name="main_PacienteEncontrado">Paciente encontrado</string>
+    <string name="main_CrearPaciente">Crear paciente</string>
+    <string name="main_CrearReceta">Crear Receta</string>
+    <!-- Formulario -->
+    <string name="creaPaciente_Nombre">Nombre paciente</string>
+    <string name="crearPaciente_Rut">Rut</string>
+    <string name="crearPAciente_FechaNacimiento">Fecha de Nacimiento </string>
+    <string name="crearPaciente_Sexo">Sexo</string>
+    <string name="crearPaciente_Direccion">Direccion</string>
+    <string name="crearPaciente_Edad">Edad</string>
+
+    <string name="crearReceta_Diagnostico">Diagnóstico</string>
+    <string name="crearReceta_Medicamento">Medicamentos</string>
+    <string name="crearReceta_Indicaciones">Indicaciones</string>
+    <string name="crearReceta_Firma">Firma de médico</string>
+    <string name="main_Pacientes">Pacientes</string>
+    <string name="main_HistorialRecetas">Historial de Recetas</string>
+    <string name="main_ListaPacientes">Lista de Pacientes</string>
+
+
+</resources>
