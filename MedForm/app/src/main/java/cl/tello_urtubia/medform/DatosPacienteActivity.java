@@ -7,6 +7,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.TextView;
 
 public class DatosPacienteActivity extends AppCompatActivity {
@@ -41,5 +42,16 @@ public class DatosPacienteActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public void vistaCrearReceta(View view){
+        Intent intent_vistaReceta = new Intent(this, CrearRecetaActivity.class);
+        /* TODO(2) Enviar los datos de paciente como PUTEXTRA en la intent*/
+        startActivity(intent_vistaReceta);
+
+    }
+
+    public void editarPaciente(View view) {
+
     }
 }

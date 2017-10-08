@@ -47,7 +47,7 @@ public class MainActivity extends AppCompatActivity {
         switch (id) {
             case R.id.buscar_paciente_button:
                 /* TODO(1) buscar paciente en la base de datos, cargar activity dependiendo de si se encuentra*/
-                Boolean encontrado = true;
+                Boolean encontrado = false;
                 EditText rut = (EditText) findViewById(R.id.main_RutPaciente_et);
                 String rut_string = rut.getText().toString();
                 if(encontrado){
@@ -58,6 +58,7 @@ public class MainActivity extends AppCompatActivity {
                 else {
                     intent.setClass(this, CrearPacienteActivity.class);
                     intent.putExtra("rut", rut_string);
+                    intent.putExtra("encontrado", false);
 
                 }
                 startActivity(intent);

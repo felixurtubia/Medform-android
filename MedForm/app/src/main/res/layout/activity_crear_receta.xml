@@ -6,15 +6,88 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="cl.tello_urtubia.medform.CrearRecetaActivity"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:background="@color/colorAccent">
 
     <android.support.v7.widget.Toolbar
-        android:id="@+id/toolbar"
+        android:id="@+id/toolbar_crearReceta"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:background="?attr/colorPrimary"
         android:elevation="4dp"
         android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
         app:popupTheme="@style/AppTheme.PopupOverlay" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:orientation="horizontal"
+        android:layout_margin="16dp"
+        android:gravity="fill_horizontal">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="30dp"
+            android:text="@string/crearReceta_Diagnostico"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:textColor="@color/colorPrimaryDark"
+            android:layout_weight="1"
+            />
+        <ImageButton
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:src="@drawable/ic_add_circle_outline_black_24dp"
+            android:background="@color/colorAccent"
+            android:scaleType="centerCrop"
+            android:onClick="agregarDiagnostico"
+            />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/diagnostico_ll"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:orientation="horizontal"
+        android:layout_margin="16dp"
+        android:gravity="fill_horizontal">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="30dp"
+            android:text="@string/crearReceta_Medicamento"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:textColor="@color/colorPrimaryDark"
+            android:layout_weight="1"
+            />
+        <ImageButton
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:src="@drawable/ic_add_circle_outline_black_24dp"
+            android:background="@color/colorAccent"
+            android:scaleType="centerCrop"
+            android:onClick="agregarMedicamento"
+            />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/medicamentos_ll"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+    </LinearLayout>
+
+
 
 </LinearLayout>

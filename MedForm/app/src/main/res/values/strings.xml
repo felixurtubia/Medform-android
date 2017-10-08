@@ -19,7 +19,7 @@
     <string name="crearPAciente_FechaNacimiento">Fecha de Nacimiento </string>
     <string name="crearPaciente_Sexo">Sexo</string>
     <string name="crearPaciente_Direccion">Direccion</string>
-    <string name="crearPaciente_Edad">Edad</string>
+    <string name="crearPaciente_Edad">Fecha de nacimiento</string>
 
     <string name="crearReceta_Diagnostico">Diagnóstico</string>
     <string name="crearReceta_Medicamento">Medicamentos</string>
@@ -28,6 +28,10 @@
     <string name="main_Pacientes">Pacientes</string>
     <string name="main_HistorialRecetas">Historial de Recetas</string>
     <string name="main_ListaPacientes">Lista de Pacientes</string>
+    <string name="receta_medicamentos">Medicamentos</string>
 
-
+    <string-array name="sexo_paciente">
+        <item>Femenino</item>
+        <item>Masculino</item>
+    </string-array>
 </resources>
