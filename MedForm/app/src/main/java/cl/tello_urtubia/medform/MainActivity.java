@@ -1,6 +1,8 @@
 package cl.tello_urtubia.medform;
 
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -10,8 +12,12 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import cl.tello_urtubia.medform.Utilidades.Utilidades;
 
 public class MainActivity extends AppCompatActivity {
+
+    EditText campoRut, campoNombre;
+    ConexionSQLHelper conn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -20,6 +26,10 @@ public class MainActivity extends AppCompatActivity {
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        conn = new ConexionSQLHelper(getApplicationContext(), "bd_pacientes", null, 1);
+
+        campoRut = (EditText) findViewById(R.id.main_RutPaciente_et);
     }
 
     @Override
@@ -46,8 +56,8 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent();
         switch (id) {
             case R.id.buscar_paciente_button:
-                /* TODO(1) buscar paciente en la base de datos, cargar activity dependiendo de si se encuentra*/
-                Boolean encontrado = false;
+                consultar();
+                /** Boolean encontrado = false;
                 EditText rut = (EditText) findViewById(R.id.main_RutPaciente_et);
                 String rut_string = rut.getText().toString();
                 if(encontrado){
@@ -63,6 +73,7 @@ public class MainActivity extends AppCompatActivity {
                 }
                 startActivity(intent);
                 break;
+                 */
             case R.id.historial_recetas_button:
                 intent.setClass(this, HistorialRecetasActivity.class);
                 startActivity(intent);
@@ -75,6 +86,32 @@ public class MainActivity extends AppCompatActivity {
             default:
                 break;
         }
+
+
+    }
+
+    private void consultar() {
+
+        Intent intent = new Intent();
+        SQLiteDatabase db = conn.getReadableDatabase();
+        String[] parametros= {campoRut.getText().toString()};
+
+        String[] campos = {Utilidades.CAMPO_NOMBRE, Utilidades.CAMPO_RUT, Utilidades.CAMPO_SEXO, Utilidades.CAMPO_FECHA, Utilidades.CAMPO_DIRECCION};
+
+        try {
+            Cursor cursor = db.query(Utilidades.TABLA_PACIENTE,campos, Utilidades.CAMPO_RUT+"=?", parametros , null, null, null);
+            cursor.moveToFirst();
+            DatosPacienteActivity datos = new DatosPacienteActivity();
+            datos.setPaciente(cursor.getString(0) , cursor.getString(1), cursor.getString(2), cursor.getString(3), cursor.getString(4));
+            cursor.close();
+            intent.setClass(this, DatosPacienteActivity.class);
+
+        }catch(Exception e){
+            intent.setClass(this, CrearPacienteActivity.class);
+
+
+        }
+
 
 
     }

@@ -12,6 +12,24 @@ import android.widget.TextView;
 
 public class DatosPacienteActivity extends AppCompatActivity {
     static String DATOSPACIENTE = "Datos Paciente";
+
+    private String nombre;
+    private String rut;
+    private String sexo;
+    private String fecha;
+    private String direccion;
+
+    public DatosPacienteActivity() {
+    }
+
+    public void setPaciente(String nombre, String rut, String sexo, String fecha, String direccion) {
+        this.nombre = nombre;
+        this.rut = rut;
+        this.sexo = sexo;
+        this.fecha = fecha;
+        this.direccion = direccion;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
