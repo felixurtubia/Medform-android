@@ -9,38 +9,36 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class DatosPacienteActivity extends AppCompatActivity {
-    static String DATOSPACIENTE = "Datos Paciente";
 
-    private String nombre;
-    private String rut;
-    private String sexo;
-    private String fecha;
-    private String direccion;
 
-    public DatosPacienteActivity() {
-    }
-
-    public void setPaciente(String nombre, String rut, String sexo, String fecha, String direccion) {
-        this.nombre = nombre;
-        this.rut = rut;
-        this.sexo = sexo;
-        this.fecha = fecha;
-        this.direccion = direccion;
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+        Toast.makeText(getApplicationContext(), "Paciente encontrado", Toast.LENGTH_LONG).show();
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_datos_paciente);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_datospaciente);
         setSupportActionBar(toolbar);
 
         Intent intent = getIntent();
-        String rut = intent.getStringExtra("rut");
+        String nombre = getIntent().getStringExtra("nombre");
+        String rut = getIntent().getStringExtra("rut");
+        String sexo = getIntent().getStringExtra("sexo");
+        String fecha = getIntent().getStringExtra("fecha");
+
         TextView rut_tv = (TextView) findViewById(R.id.rutPaciente_tv);
+        TextView nombre_tv = (TextView) findViewById(R.id.nombrePaciente_tv);
+        TextView sexo_tv = (TextView) findViewById(R.id.sexoPaciente_tv);
+        TextView edad_tv = (TextView) findViewById(R.id.edadPaciente_tv);
         rut_tv.setText(rut);
+        nombre_tv.setText(nombre);
+        sexo_tv.setText(sexo);
+        edad_tv.setText(fecha);
 
     }
 

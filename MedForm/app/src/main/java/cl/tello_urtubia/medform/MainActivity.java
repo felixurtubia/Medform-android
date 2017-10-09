@@ -12,6 +12,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import cl.tello_urtubia.medform.Utilidades.Utilidades;
 
 public class MainActivity extends AppCompatActivity {
@@ -57,23 +59,8 @@ public class MainActivity extends AppCompatActivity {
         switch (id) {
             case R.id.buscar_paciente_button:
                 consultar();
-                /** Boolean encontrado = false;
-                EditText rut = (EditText) findViewById(R.id.main_RutPaciente_et);
-                String rut_string = rut.getText().toString();
-                if(encontrado){
-                    intent.setClass(this, DatosPacienteActivity.class);
-                    intent.putExtra("rut", rut_string);
-
-                }
-                else {
-                    intent.setClass(this, CrearPacienteActivity.class);
-                    intent.putExtra("rut", rut_string);
-                    intent.putExtra("encontrado", false);
-
-                }
-                startActivity(intent);
                 break;
-                 */
+
             case R.id.historial_recetas_button:
                 intent.setClass(this, HistorialRecetasActivity.class);
                 startActivity(intent);
@@ -96,18 +83,27 @@ public class MainActivity extends AppCompatActivity {
         SQLiteDatabase db = conn.getReadableDatabase();
         String[] parametros= {campoRut.getText().toString()};
 
-        String[] campos = {Utilidades.CAMPO_NOMBRE, Utilidades.CAMPO_RUT, Utilidades.CAMPO_SEXO, Utilidades.CAMPO_FECHA, Utilidades.CAMPO_DIRECCION};
+        String[] campos = {Utilidades.CAMPO_NOMBRE, Utilidades.CAMPO_RUT, Utilidades.CAMPO_FECHA };
 
         try {
-            Cursor cursor = db.query(Utilidades.TABLA_PACIENTE,campos, Utilidades.CAMPO_RUT+"=?", parametros , null, null, null);
+            //Cursor cursor = db.query(Utilidades.TABLA_PACIENTE,campos, Utilidades.CAMPO_RUT+"=?", parametros , null, null, null);
+            Cursor cursor = db.rawQuery("SELECT nombre,rut,fecnac,direccion FROM paciente WHERE rut =?", parametros);
             cursor.moveToFirst();
-            DatosPacienteActivity datos = new DatosPacienteActivity();
-            datos.setPaciente(cursor.getString(0) , cursor.getString(1), cursor.getString(2), cursor.getString(3), cursor.getString(4));
-            cursor.close();
             intent.setClass(this, DatosPacienteActivity.class);
+            intent.putExtra("nombre", cursor.getString(0)+"");
+            intent.putExtra("rut", cursor.getString(1)+"");
+            intent.putExtra("sexo", cursor.getString(2)+"");
+            intent.putExtra("fecha", cursor.getString(3)+"");
+            cursor.close();
+
+            startActivity(intent); // Si existe el paciente, pasamos a la vista de mostrar los datos del paciente
 
         }catch(Exception e){
+            Toast.makeText(getApplicationContext(), "Paciente no encontrado", Toast.LENGTH_LONG).show();
             intent.setClass(this, CrearPacienteActivity.class);
+            intent.putExtra("rut", campoRut.getText().toString());
+
+            startActivity(intent); // Si falla al buscar paciente, vamos a crear uno con el rut que se puso
 
 
         }

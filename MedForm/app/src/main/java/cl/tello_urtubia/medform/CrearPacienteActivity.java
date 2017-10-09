@@ -9,46 +9,50 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
-import static android.provider.BaseColumns._ID;
 
 import cl.tello_urtubia.medform.Utilidades.Utilidades;
 
 public class CrearPacienteActivity extends AppCompatActivity {
 
-
-
     EditText campoNombre, campoRut, campoFecha, campoDireccion ;
+    String sexo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_crear_paciente);
-        /* TODO (4) Cambiar las action bar de cada activity para que quede bien*/
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_crearPaciente);
         setSupportActionBar(toolbar);
 
         Intent intent = getIntent();
-        Boolean encontrado = intent.getBooleanExtra("encontrado", true);
-
-        if (!encontrado) {
-            /*TextView encontrado_msg = (TextView) findViewById(R.id.crearPaciente_noEncontrado);
-            encontrado_msg.setVisibility(View.VISIBLE);*/
-            Toast.makeText(this, "Paciente no encontrado.\n Crea uno nuevo", Toast.LENGTH_SHORT);
-        }
+        String rut = getIntent().getStringExtra("rut");
+        campoRut = (EditText) findViewById(R.id.campoRut);
+        campoRut.setText(rut);
 
         Spinner spinner = (Spinner) findViewById(R.id.crearPaciente_spinnerSexo);
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(
                 this, R.array.sexo_paciente, android.R.layout.simple_spinner_item);
+
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
 
+        spinner.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long l) {
+                sexo = parent.getItemAtPosition(position).toString();
+            }
+
+            public void onNothingSelected(AdapterView<?> parent) {
+                // Another interface callback, nosé que poner acá, asumimos que el genero del cliente es un helicoptero apache?
+            }
+        });
         campoNombre = (EditText) findViewById(R.id.campoNombre);
-        campoRut = (EditText) findViewById(R.id.campoRut);
         campoFecha = (EditText) findViewById(R.id.campoFecha);
         campoDireccion = (EditText) findViewById(R.id.campoDireccion);
 
@@ -75,7 +79,6 @@ public class CrearPacienteActivity extends AppCompatActivity {
     }
 
     public void onClick (View view) {
-        //registrarPacientes();
         registrarPacientesSQL();
     }
 
@@ -91,27 +94,11 @@ public class CrearPacienteActivity extends AppCompatActivity {
 
         db.execSQL(insert);
 
+        Toast.makeText(getApplicationContext(), "Paciente Registrado", Toast.LENGTH_SHORT).show();
+
         db.close();
     }
 
-    private void registrarPacientes(){
-        ConexionSQLHelper conn = new ConexionSQLHelper(this, "bd_pacientes", null, 1);
-
-        SQLiteDatabase db = conn.getWritableDatabase();
-
-        ContentValues values = new ContentValues();
-        values.put(Utilidades.CAMPO_NOMBRE, campoNombre.getText().toString());
-        values.put(Utilidades.CAMPO_RUT, campoRut.getText().toString());
-        values.put(Utilidades.CAMPO_FECHA, campoFecha.getText().toString());
-        values.put(Utilidades.CAMPO_DIRECCION, campoDireccion.getText().toString());
-
-        Long idResultante = db.insert(Utilidades.TABLA_PACIENTE, Utilidades.CAMPO_ID, values);
-
-        Toast.makeText(getApplicationContext(), "Paciente Registrado: "+idResultante, Toast.LENGTH_SHORT).show();
-
-        db.close();
-
-    }
 
 
 }
