@@ -17,6 +17,12 @@ public class Paciente {
         this.direccion = direccion;
     }
 
+    public Paciente(){
+
+    }
+
+
+
     public String getNombre() {
         return nombre;
     }

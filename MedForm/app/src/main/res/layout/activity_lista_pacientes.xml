@@ -6,4 +6,8 @@
     android:layout_height="match_parent"
     tools:context="cl.tello_urtubia.medform.ListaPacientesActivity">
 
+    <ListView
+        android:id="@+id/listViewPacientes"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
 </android.support.constraint.ConstraintLayout>
