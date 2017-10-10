@@ -28,6 +28,9 @@
             android:name=".DatosPacienteActivity"
             android:theme="@style/AppTheme.NoActionBar"/>
         <activity
+            android:name=".EditarPacienteActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
             android:name=".HistorialRecetasActivity"
             android:theme="@style/AppTheme.NoActionBar"/>
         <activity

@@ -1,9 +1,12 @@
 package cl.tello_urtubia.medform;
 
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
@@ -31,6 +34,23 @@ public class ListaPacientesActivity extends AppCompatActivity {
 
         ArrayAdapter adaptador = new ArrayAdapter(this, android.R.layout.simple_expandable_list_item_1,listaInfo);
         listViewpacientes.setAdapter(adaptador);
+
+        listViewpacientes.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int pos, long id) {
+
+                Intent intent = new Intent();
+
+                intent.setClass(getApplicationContext(), DatosPacienteActivity.class);
+                intent.putExtra("nombre", listaPaciente.get(pos).getNombre());
+                intent.putExtra("rut", listaPaciente.get(pos).getRut());
+                intent.putExtra("sexo", listaPaciente.get(pos).getSexo());
+                intent.putExtra("fecha", listaPaciente.get(pos).getFecha());
+
+                startActivity(intent);
+
+            }
+        });
 
 
     }

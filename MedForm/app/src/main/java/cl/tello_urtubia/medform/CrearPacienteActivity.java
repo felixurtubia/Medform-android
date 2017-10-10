@@ -31,7 +31,7 @@ public class CrearPacienteActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_crearPaciente);
         setSupportActionBar(toolbar);
 
-        Intent intent = getIntent();
+
         String rut = getIntent().getStringExtra("rut");
         campoRut = (EditText) findViewById(R.id.campoRut);
         campoRut.setText(rut);
