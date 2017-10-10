@@ -18,7 +18,7 @@ import cl.tello_urtubia.medform.Utilidades.Utilidades;
 
 public class MainActivity extends AppCompatActivity {
 
-    EditText campoRut, campoNombre;
+    EditText campoRut;
     ConexionSQLHelper conn;
 
     @Override
@@ -83,11 +83,11 @@ public class MainActivity extends AppCompatActivity {
         SQLiteDatabase db = conn.getReadableDatabase();
         String[] parametros= {campoRut.getText().toString()};
 
-        String[] campos = {Utilidades.CAMPO_NOMBRE, Utilidades.CAMPO_RUT, Utilidades.CAMPO_FECHA };
+        String[] campos = {Utilidades.CAMPO_NOMBRE, Utilidades.CAMPO_RUT, Utilidades.CAMPO_SEXO, Utilidades.CAMPO_DIRECCION };
 
         try {
             //Cursor cursor = db.query(Utilidades.TABLA_PACIENTE,campos, Utilidades.CAMPO_RUT+"=?", parametros , null, null, null);
-            Cursor cursor = db.rawQuery("SELECT nombre,rut,fecnac,direccion FROM paciente WHERE rut =?", parametros);
+            Cursor cursor = db.rawQuery("SELECT nombre,rut,sexo,fecnac FROM paciente WHERE rut =?", parametros);
             cursor.moveToFirst();
             intent.setClass(this, DatosPacienteActivity.class);
             intent.putExtra("nombre", cursor.getString(0)+"");

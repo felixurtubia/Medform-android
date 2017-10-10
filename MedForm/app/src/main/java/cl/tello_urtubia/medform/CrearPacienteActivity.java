@@ -22,6 +22,7 @@ public class CrearPacienteActivity extends AppCompatActivity {
 
     EditText campoNombre, campoRut, campoFecha, campoDireccion ;
     String sexo;
+    Spinner spinner;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,24 +35,26 @@ public class CrearPacienteActivity extends AppCompatActivity {
         String rut = getIntent().getStringExtra("rut");
         campoRut = (EditText) findViewById(R.id.campoRut);
         campoRut.setText(rut);
+        spinner = (Spinner) findViewById(R.id.crearPaciente_spinnerSexo);
 
-        Spinner spinner = (Spinner) findViewById(R.id.crearPaciente_spinnerSexo);
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(
                 this, R.array.sexo_paciente, android.R.layout.simple_spinner_item);
 
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
 
-        spinner.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long l) {
-                sexo = parent.getItemAtPosition(position).toString();
+            public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
+                sexo = parent.getItemAtPosition(pos).toString();
             }
 
-            public void onNothingSelected(AdapterView<?> parent) {
-                // Another interface callback, nosé que poner acá, asumimos que el genero del cliente es un helicoptero apache?
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
             }
         });
+
         campoNombre = (EditText) findViewById(R.id.campoNombre);
         campoFecha = (EditText) findViewById(R.id.campoFecha);
         campoDireccion = (EditText) findViewById(R.id.campoDireccion);
@@ -88,9 +91,9 @@ public class CrearPacienteActivity extends AppCompatActivity {
         SQLiteDatabase db = conn.getWritableDatabase();
 
         String insert = "INSERT INTO "+Utilidades.TABLA_PACIENTE+" ( "+Utilidades.CAMPO_NOMBRE+","
-                +Utilidades.CAMPO_RUT+","+Utilidades.CAMPO_FECHA+","+Utilidades.CAMPO_DIRECCION+")"
+                +Utilidades.CAMPO_RUT+","+Utilidades.CAMPO_FECHA+","+Utilidades.CAMPO_SEXO+","+Utilidades.CAMPO_DIRECCION+")"
                 + "VALUES ( '"+campoNombre.getText().toString()+"', '"+campoRut.getText().toString()+"', '"
-                +campoFecha.getText().toString()+"', '"+campoDireccion.getText().toString()+"')" ;
+                +campoFecha.getText().toString()+"', '"+sexo+"', '"+campoDireccion.getText().toString()+"')" ;
 
         db.execSQL(insert);
 
