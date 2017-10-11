@@ -1,8 +1,13 @@
 <resources>
     <string name="app_name">MedForm</string>
 
-    <string name="action_settings">Ajustes</string>
-    <string name="action_print">Imprimir</string>
+    <string name="action_settings">Ajustes de Sistema</string>
+    <string name="action_print">Imprimir Receta</string>
+    <string name="action_user_settings">Ajustes de Usuario</string>
+    <string name="action_editar_paciente">Editar Paciente</string>
+    <string name="action_eliminar_paciente">Eliminar Paciente</string>
+    <string name="action_nueva_receta">Nueva Receta</string>
+    <string name="Hola">Hola</string>
 
     <!-- Página de Inicio-->
 
