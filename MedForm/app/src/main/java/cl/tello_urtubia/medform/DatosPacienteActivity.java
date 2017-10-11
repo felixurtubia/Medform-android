@@ -1,6 +1,7 @@
 package cl.tello_urtubia.medform;
 
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -11,6 +12,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import cl.tello_urtubia.medform.Utilidades.Utilidades;
 
 public class DatosPacienteActivity extends AppCompatActivity {
 
@@ -61,6 +64,7 @@ public class DatosPacienteActivity extends AppCompatActivity {
                 editarPaciente();
                 break;
             case R.id.action_eliminar_paciente:
+                eliminarPaciente();
                 break;
             case R.id.action_nueva_receta:
                 vistaCrearReceta();
@@ -77,26 +81,27 @@ public class DatosPacienteActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-   /* public void OptionsSelected(View view) {
+    public void eliminarPaciente() {
 
-        Button boton = (Button) view;
-        int id = boton.getId();
-        Intent intent = new Intent();
-        switch (id) {
-            case R.id.editarPacientebutton:
-                editarPaciente();
-                break;
+        // Luego de eliminar al paciente, se envia un toast y se envia al mainActivity
 
-            case R.id.crearReceta_button:
-                vistaCrearReceta();
-                break;
+        String rut = getIntent().getStringExtra("rut");
 
-            default:
-                break;
-        }
+        ConexionSQLHelper conn = new ConexionSQLHelper(this, "bd_pacientes", null, 1);
 
+        SQLiteDatabase db = conn.getWritableDatabase();
 
-    }*/
+        String delete = "DELETE FROM "+Utilidades.TABLA_PACIENTE+" WHERE "+Utilidades.CAMPO_RUT+"= '"+rut+"' ;" ;
+
+        db.execSQL(delete);
+
+        Toast.makeText(getApplicationContext(), "Paciente Eliminado, Volviendo al inicio", Toast.LENGTH_SHORT).show();
+
+        db.close();
+
+        Intent intentMain = new Intent(this, MainActivity.class);
+        startActivity(intentMain);
+    }
 
     public void vistaCrearReceta(){
         Intent intent_vistaReceta = new Intent(this, CrearRecetaActivity.class);
