@@ -30,6 +30,8 @@
     <string name="main_ListaPacientes">Lista de Pacientes</string>
     <string name="receta_medicamentos">Medicamentos</string>
 
+    <string name="crear_ultima_receta">Última receta</string>
+
     <string-array name="sexo_paciente">
         <item>Femenino</item>
         <item>Masculino</item>

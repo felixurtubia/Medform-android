@@ -82,18 +82,29 @@ public class CrearPacienteActivity extends AppCompatActivity {
     }
 
     public void onClick (View view) {
-        registrarPacientesSQL();
+        String nombre = campoNombre.getText().toString();
+        String rut = campoRut.getText().toString();
+        String fecha = campoFecha.getText().toString();
+        String direccion = campoDireccion.getText().toString();
+        registrarPacientesSQL(nombre, rut, fecha, sexo, direccion);
+
+        Intent intent = new Intent(this, DatosPacienteActivity.class);
+        intent.putExtra("rut", rut);
+        intent.putExtra("nombre", nombre);
+        intent.putExtra("sexo", sexo);
+        intent.putExtra("fecha", fecha);
+        intent.putExtra("direccion", direccion);
+        startActivity(intent);
     }
 
-    private void registrarPacientesSQL() {
+    private void registrarPacientesSQL(String nombre, String rut, String fecha, String sexo, String direccion) {
         ConexionSQLHelper conn = new ConexionSQLHelper(this, "bd_pacientes", null, 1);
 
         SQLiteDatabase db = conn.getWritableDatabase();
 
         String insert = "INSERT INTO "+Utilidades.TABLA_PACIENTE+" ( "+Utilidades.CAMPO_NOMBRE+","
                 +Utilidades.CAMPO_RUT+","+Utilidades.CAMPO_FECHA+","+Utilidades.CAMPO_SEXO+","+Utilidades.CAMPO_DIRECCION+")"
-                + "VALUES ( '"+campoNombre.getText().toString()+"', '"+campoRut.getText().toString()+"', '"
-                +campoFecha.getText().toString()+"', '"+sexo+"', '"+campoDireccion.getText().toString()+"')" ;
+                + "VALUES ( '"+nombre+"', '"+rut+"', '" +fecha+"', '"+sexo+"', '"+direccion+"')" ;
 
         db.execSQL(insert);
 

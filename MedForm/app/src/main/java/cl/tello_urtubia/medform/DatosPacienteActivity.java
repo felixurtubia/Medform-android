@@ -19,7 +19,7 @@ public class DatosPacienteActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
-        Toast.makeText(getApplicationContext(), "Paciente", Toast.LENGTH_LONG).show();
+
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_datos_paciente);
@@ -31,15 +31,18 @@ public class DatosPacienteActivity extends AppCompatActivity {
         String rut = getIntent().getStringExtra("rut");
         String sexo = getIntent().getStringExtra("sexo");
         String fecha = getIntent().getStringExtra("fecha");
+        String direccion = getIntent().getStringExtra("direccion");
 
         TextView rut_tv = (TextView) findViewById(R.id.rutPaciente_tv);
         TextView nombre_tv = (TextView) findViewById(R.id.nombrePaciente_tv);
         TextView sexo_tv = (TextView) findViewById(R.id.sexoPaciente_tv);
         TextView edad_tv = (TextView) findViewById(R.id.edadPaciente_tv);
+        TextView direccion_tv = (TextView) findViewById(R.id.direccionPaciente_tv);
         rut_tv.setText(rut);
         nombre_tv.setText(nombre);
         sexo_tv.setText(sexo);
         edad_tv.setText(fecha);
+        direccion_tv.setText(direccion);
 
     }
 
@@ -92,10 +95,21 @@ public class DatosPacienteActivity extends AppCompatActivity {
     public void editarPaciente() {
 
         String rut = getIntent().getStringExtra("rut");
+        String nombre = getIntent().getStringExtra("nombre");
+        String sexo = getIntent().getStringExtra("sexo");
+        String fecha = getIntent().getStringExtra("fecha");
+        String direccion = getIntent().getStringExtra("direccion");
+
 
         Intent intent = new Intent();
         intent.setClass(this, EditarPacienteActivity.class);
         intent.putExtra("rut", rut);
+        intent.putExtra("nombre", nombre);
+        intent.putExtra("sexo", sexo);
+        intent.putExtra("fecha", fecha);
+        intent.putExtra("direccion", direccion);
+
+
 
         startActivity(intent);
 

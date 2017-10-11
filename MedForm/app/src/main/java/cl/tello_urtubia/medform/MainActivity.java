@@ -87,15 +87,16 @@ public class MainActivity extends AppCompatActivity {
 
         try {
             //Cursor cursor = db.query(Utilidades.TABLA_PACIENTE,campos, Utilidades.CAMPO_RUT+"=?", parametros , null, null, null);
-            Cursor cursor = db.rawQuery("SELECT nombre,rut,sexo,fecnac FROM paciente WHERE rut =?", parametros);
+            Cursor cursor = db.rawQuery("SELECT nombre,rut,sexo,fecnac,direccion FROM paciente WHERE rut =?", parametros);
             cursor.moveToFirst();
             intent.setClass(this, DatosPacienteActivity.class);
             intent.putExtra("nombre", cursor.getString(0)+"");
             intent.putExtra("rut", cursor.getString(1)+"");
             intent.putExtra("sexo", cursor.getString(2)+"");
             intent.putExtra("fecha", cursor.getString(3)+"");
+            intent.putExtra("direccion", cursor.getShort(4)+"");
             cursor.close();
-
+            Toast.makeText(getApplicationContext(), "PacienteEncontrado", Toast.LENGTH_LONG).show();
             startActivity(intent); // Si existe el paciente, pasamos a la vista de mostrar los datos del paciente
 
         }catch(Exception e){

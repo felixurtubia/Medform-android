@@ -28,15 +28,12 @@ public  class EditarPacienteActivity extends AppCompatActivity{
         Toast.makeText(getApplicationContext(), "wena", Toast.LENGTH_LONG).show();
 
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.activity_editar_paciente);
 
 
         spinner = (Spinner) findViewById(R.id.crearPaciente_spinnerSexo);
-
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(
                 this, R.array.sexo_paciente, android.R.layout.simple_spinner_item);
-
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
 
@@ -55,6 +52,12 @@ public  class EditarPacienteActivity extends AppCompatActivity{
         campoNombre = (EditText) findViewById(R.id.campoNombre);
         campoFecha = (EditText) findViewById(R.id.campoFecha);
         campoDireccion = (EditText) findViewById(R.id.campoDireccion);
+        /*campoRut = (EditText) findViewById(R.id.campoRut);*/
+
+        Intent intent = getIntent();
+        campoNombre.setText(intent.getStringExtra("nombre"));
+        campoDireccion.setText(intent.getStringExtra("direccion"));
+        campoFecha.setText(intent.getStringExtra("fecha"));
     }
 
     public void onClick (View view) {
@@ -63,17 +66,21 @@ public  class EditarPacienteActivity extends AppCompatActivity{
 
     private void editarPacientesSQL() {
 
+        /*String rut = campoRut.getText().toString();*/
         String rut = getIntent().getStringExtra("rut");
+        String nombre = campoNombre.getText().toString();
+        String fecha = campoFecha.getText().toString();
+        String direccion = campoDireccion.getText().toString();
+
 
         ConexionSQLHelper conn = new ConexionSQLHelper(this, "bd_pacientes", null, 1);
-
         SQLiteDatabase db = conn.getWritableDatabase();
 
         // UPDATE tablename SET column1 = value1, col2 = val2 WHERE condition
 
-        String update = "UPDATE "+ Utilidades.TABLA_PACIENTE+" SET "+Utilidades.CAMPO_NOMBRE+" = '"+campoNombre.getText().toString()+"' , "
-                +Utilidades.CAMPO_FECHA+" = '"+campoFecha.getText().toString()+"' ,"+Utilidades.CAMPO_SEXO+" = '"+sexo+"', "+Utilidades.CAMPO_DIRECCION
-                +" = '"+campoDireccion.getText().toString()+"' WHERE "+Utilidades.CAMPO_RUT+" = '"+rut+"' ;";
+        String update = "UPDATE "+ Utilidades.TABLA_PACIENTE+" SET "+Utilidades.CAMPO_NOMBRE+" = '"+nombre+"' , "
+                +Utilidades.CAMPO_FECHA+" = '"+fecha+"' ,"+Utilidades.CAMPO_SEXO+" = '"+sexo+"', "+Utilidades.CAMPO_DIRECCION
+                +" = '"+direccion+"' WHERE "+Utilidades.CAMPO_RUT+" = '"+rut+"' ;";
 
         db.execSQL(update);
 
@@ -83,9 +90,14 @@ public  class EditarPacienteActivity extends AppCompatActivity{
 
         Intent inte = new Intent();
 
-        inte.setClass(this, MainActivity.class);
+        inte.setClass(this, DatosPacienteActivity.class);
 
-        startActivity(inte); // Lo redireccionamos al inicio
+        inte.putExtra("rut", rut);
+        inte.putExtra("nombre", nombre);
+        inte.putExtra("sexo", sexo);
+        inte.putExtra("fecha", fecha);
+        inte.putExtra("direccion", direccion);
+        startActivity(inte); // Lo redireccionamos a los datos de paciente :D
 
 
     }
