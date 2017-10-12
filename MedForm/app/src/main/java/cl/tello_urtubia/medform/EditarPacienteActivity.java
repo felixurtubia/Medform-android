@@ -4,7 +4,11 @@ package cl.tello_urtubia.medform;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -29,6 +33,9 @@ public  class EditarPacienteActivity extends AppCompatActivity{
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_editar_paciente);
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_editarPaciente);
+        setSupportActionBar(toolbar);
 
 
         spinner = (Spinner) findViewById(R.id.crearPaciente_spinnerSexo);
@@ -58,6 +65,36 @@ public  class EditarPacienteActivity extends AppCompatActivity{
         campoNombre.setText(intent.getStringExtra("nombre"));
         campoDireccion.setText(intent.getStringExtra("direccion"));
         campoFecha.setText(intent.getStringExtra("fecha"));
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_inicio, menu);
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(true);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        switch (id) {
+            case R.id.action_user_settings:
+                break;
+            case R.id.action_settings:
+                break;
+            case android.R.id.home:
+                Intent homeIntent = new Intent(this, MainActivity.class);
+                startActivity(homeIntent);
+                return true;
+            default:
+                break;
+
+        }
+
+
+        return super.onOptionsItemSelected(item);
     }
 
     public void onClick (View view) {

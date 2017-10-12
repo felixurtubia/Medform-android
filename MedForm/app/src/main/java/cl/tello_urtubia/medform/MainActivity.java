@@ -3,6 +3,7 @@ package cl.tello_urtubia.medform;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -29,6 +30,7 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+
         conn = new ConexionSQLHelper(getApplicationContext(), "bd_pacientes", null, 1);
 
         campoRut = (EditText) findViewById(R.id.main_RutPaciente_et);
@@ -37,6 +39,8 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_inicio, menu);
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setHomeButtonEnabled(true);
         return true;
     }
 
@@ -48,6 +52,10 @@ public class MainActivity extends AppCompatActivity {
                 break;
             case R.id.action_settings:
                 break;
+            case android.R.id.home:
+                Intent homeIntent = new Intent(this, MainActivity.class);
+                startActivity(homeIntent);
+                return true;
         }
 
 
