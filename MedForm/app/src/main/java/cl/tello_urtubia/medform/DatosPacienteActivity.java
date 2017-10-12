@@ -56,15 +56,28 @@ public class DatosPacienteActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        switch (id) {
+            case R.id.action_editar_paciente:
+                editarPaciente();
+                break;
+            case R.id.action_eliminar_paciente:
+                break;
+            case R.id.action_nueva_receta:
+                vistaCrearReceta();
+            case R.id.action_user_settings:
+                break;
+            case R.id.action_settings:
+                break;
+            default:
+                break;
+
         }
+
 
         return super.onOptionsItemSelected(item);
     }
 
-    public void OptionsSelected(View view) {
+   /* public void OptionsSelected(View view) {
 
         Button boton = (Button) view;
         int id = boton.getId();
@@ -83,7 +96,7 @@ public class DatosPacienteActivity extends AppCompatActivity {
         }
 
 
-    }
+    }*/
 
     public void vistaCrearReceta(){
         Intent intent_vistaReceta = new Intent(this, CrearRecetaActivity.class);

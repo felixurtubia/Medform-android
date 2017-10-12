@@ -21,7 +21,7 @@ public class CrearRecetaActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.main, menu);
+        getMenuInflater().inflate(R.menu.menu_crear_receta, menu);
         return true;
     }
 
@@ -29,11 +29,13 @@ public class CrearRecetaActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 
-        if (id == R.id.action_print) {
-            return true;
-        }
-        else if (id == R.id.action_settings) {
-            return true;
+        switch (id) {
+            case R.id.action_user_settings:
+                break;
+            case R.id.action_settings:
+                break;
+            case R.id.action_print:
+                break;
         }
 
         return super.onOptionsItemSelected(item);

@@ -25,7 +25,7 @@ public  class EditarPacienteActivity extends AppCompatActivity{
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
-        Toast.makeText(getApplicationContext(), "wena", Toast.LENGTH_LONG).show();
+        /*Toast.makeText(getApplicationContext(), "wena", Toast.LENGTH_LONG).show();*/
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_editar_paciente);
