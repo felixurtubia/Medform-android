@@ -3,6 +3,7 @@ package cl.tello_urtubia.medform;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -64,6 +65,8 @@ public class CrearPacienteActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_inicio, menu);
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(true);
         return true;
     }
 
@@ -76,6 +79,10 @@ public class CrearPacienteActivity extends AppCompatActivity {
                 break;
             case R.id.action_settings:
                 break;
+            case android.R.id.home:
+                Intent homeIntent = new Intent(this, MainActivity.class);
+                startActivity(homeIntent);
+                return true;
         }
 
         return super.onOptionsItemSelected(item);

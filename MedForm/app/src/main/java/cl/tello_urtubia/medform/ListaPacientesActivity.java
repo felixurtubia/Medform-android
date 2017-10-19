@@ -3,8 +3,14 @@ package cl.tello_urtubia.medform;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.support.v4.view.MenuItemCompat;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.SearchView;
+import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -26,6 +32,9 @@ public class ListaPacientesActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_lista_pacientes);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_listaPacientes);
+        setSupportActionBar(toolbar);
+
 
         conn = new ConexionSQLHelper(getApplicationContext(), "bd_pacientes", null, 1);
         listViewpacientes = (ListView) findViewById(R.id.listViewPacientes);
@@ -46,6 +55,7 @@ public class ListaPacientesActivity extends AppCompatActivity {
                 intent.putExtra("rut", listaPaciente.get(pos).getRut());
                 intent.putExtra("sexo", listaPaciente.get(pos).getSexo());
                 intent.putExtra("fecha", listaPaciente.get(pos).getFecha());
+                intent.putExtra("direccion", listaPaciente.get(pos).getDireccion());
 
                 startActivity(intent);
 
@@ -53,6 +63,40 @@ public class ListaPacientesActivity extends AppCompatActivity {
         });
 
 
+    }
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_lista_pacientes, menu);
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(true);
+
+        /*MenuItem searchItem = menu.findItem(R.id.action_search);
+        SearchView searchView =
+                (SearchView) MenuItemCompat.getActionView(searchItem);*/
+
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        switch (id) {
+            case R.id.action_user_settings:
+                break;
+            case R.id.action_settings:
+                break;
+            case android.R.id.home:
+                Intent homeIntent = new Intent(this, MainActivity.class);
+                startActivity(homeIntent);
+                return true;
+            default:
+                break;
+
+        }
+
+
+        return super.onOptionsItemSelected(item);
     }
 
     private void consultarListaPacientes() {
@@ -73,7 +117,7 @@ public class ListaPacientesActivity extends AppCompatActivity {
 
             listaPaciente.add(paciente); 
         }
-        
+        /* TODO(5) Falta cerrar el cursor y la base de datos :O !!! Va a exlpotar !!!*/
         obtenerLista();
 
         cursor.close();
