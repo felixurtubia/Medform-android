@@ -104,8 +104,12 @@ public class DatosPacienteActivity extends AppCompatActivity {
     }
 
     public void vistaCrearReceta(){
-        Intent intent_vistaReceta = new Intent(this, CrearRecetaActivity.class);
+        String rut = getIntent().getStringExtra("rut");
+        String nombre = getIntent().getStringExtra("nombre");
 
+        Intent intent_vistaReceta = new Intent(this, CrearRecetaActivity.class);
+        intent_vistaReceta.putExtra("rut", rut);
+        intent_vistaReceta.putExtra("nombre", nombre);
         startActivity(intent_vistaReceta);
 
     }

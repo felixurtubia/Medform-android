@@ -69,14 +69,13 @@
             android:textColor="@color/colorPrimaryDark"
             android:layout_weight="1"
             />
-        <ImageButton
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:src="@drawable/ic_add_circle_outline_black_24dp"
-            android:background="@color/colorAccent"
-            android:scaleType="centerCrop"
-            android:onClick="agregarMedicamento"
-            />
+
+        <EditText
+            android:id="@+id/editText"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="fill_vertical"
+            android:orientation="horizontal" />
 
     </LinearLayout>
 

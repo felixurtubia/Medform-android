@@ -76,6 +76,9 @@ public class ListaPacientesActivity extends AppCompatActivity {
         
         obtenerLista();
 
+        cursor.close();
+        db.close();
+
     }
 
     private void obtenerLista() {
