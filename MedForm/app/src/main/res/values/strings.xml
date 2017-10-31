@@ -37,6 +37,8 @@
 
     <string name="crear_ultima_receta">Última receta</string>
     <string name="action_search">Buscar</string>
+    <string name="agregar_diagnostico_hint">Escribir  diagnóstico</string>
+    <string name="agregar_medicamento_hint">Escribir medicamento</string>
 
     <string-array name="sexo_paciente">
         <item>Femenino</item>

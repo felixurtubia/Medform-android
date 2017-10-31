@@ -45,6 +45,14 @@
 
     </LinearLayout>
 
+    <EditText
+        android:id="@+id/campoDiagnostico"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/agregar_diagnostico_hint"
+        android:inputType="text"
+        android:layout_margin="8dp"/>
+
     <LinearLayout
         android:id="@+id/diagnostico_ll"
         android:layout_width="match_parent"
@@ -70,14 +78,24 @@
             android:layout_weight="1"
             />
 
-        <EditText
-            android:id="@+id/editText"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="fill_vertical"
-            android:orientation="horizontal" />
+        <ImageButton
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:src="@drawable/ic_add_circle_outline_black_24dp"
+            android:background="@color/colorAccent"
+            android:scaleType="centerCrop"
+            android:onClick="agregarMedicamento"
+            />
 
     </LinearLayout>
+
+    <EditText
+        android:id="@+id/campoMedicamento"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/agregar_medicamento_hint"
+        android:inputType="text"
+        android:layout_margin="8dp"/>
 
     <LinearLayout
         android:id="@+id/medicamentos_ll"

@@ -1,11 +1,8 @@
 package cl.tello_urtubia.medform;
 
 import android.content.Intent;
-<<<<<<< HEAD
 import android.database.sqlite.SQLiteDatabase;
-=======
 import android.support.v7.app.ActionBar;
->>>>>>> 97e382aef9194d9f112648a63d117d9fda8b9142
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
