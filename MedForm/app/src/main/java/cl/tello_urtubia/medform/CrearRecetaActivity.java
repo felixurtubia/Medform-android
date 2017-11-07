@@ -31,7 +31,11 @@ import android.widget.Toast;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.Period;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Calendar;
 
 import cl.tello_urtubia.medform.Utilidades.Utilidades;
 
@@ -248,9 +252,11 @@ public class CrearRecetaActivity extends AppCompatActivity {
             canvas.drawLine(105, 200, 290, 200, paint);
             canvas.drawText(rut, 105, 200, paint);
 
-            canvas.drawText("Fecha: ", 300, 200, paint);
+
+
+            canvas.drawText("Edad: ", 300, 200, paint);
             canvas.drawLine(360, 200, 560, 200, paint);
-            canvas.drawText(fecha, 360, 200, paint);
+            canvas.drawText(calculaEdad(fecha)+" años", 360, 200, paint);
 
             canvas.drawText("Sexo: ", 65, 225, paint);
             canvas.drawLine(115, 225, 210, 225, paint);
@@ -283,12 +289,16 @@ public class CrearRecetaActivity extends AppCompatActivity {
                 canvas.drawText("Sin Medicamentos", 90, 335 , paint);
             }
 
+            String ano = Integer.toString(Calendar.getInstance().get(Calendar.YEAR)) ;
+            String mes = Integer.toString(Calendar.getInstance().get(Calendar.MONTH)+1) ;
+            String dia = Integer.toString(Calendar.getInstance().get(Calendar.DAY_OF_MONTH)) ;
+
 
 
             canvas.drawText("Fecha: ", 65, 720, paint);
-            canvas.drawText("6/", 120, 720, paint  ); //Dia del Mes
-            canvas.drawText("11/", 140, 720, paint  ); // Mes
-            canvas.drawText("17", 170, 720, paint  ); // Año, pensaba tambien poner la hora pero siento que seria desperdicio de espacio :s
+            canvas.drawText(dia+"/", 120, 720, paint  );
+            canvas.drawText(mes+"/", 140, 720, paint  );
+            canvas.drawText(ano, 170, 720, paint  );
             canvas.drawLine(400, 720, 560, 720, paint  );
             canvas.drawText("Firma Médico", 420, 740, paint  );
 
@@ -309,28 +319,7 @@ public class CrearRecetaActivity extends AppCompatActivity {
 
         db.execSQL(insertR);
 
-       if (medicamentos.size() > 0){
-           MedicamentoSQLHelper conz = new MedicamentoSQLHelper(this, "bd_medicamentos", null, 1);
-           SQLiteDatabase dv = conz.getWritableDatabase();
 
-           Cursor cursor = db.rawQuery("SELECT "+CAMPO_ID_RECETA+" FROM "+TABLA_RECETA+" WHERE "+CAMPO_NOMBRE+"= '"+nombre
-                   +"' AND "+CAMPO_RUT+"= '"+rut+"' AND "+CAMPO_SEXO+"= '"+sexo+"' AND "+CAMPO_FECHA+"='"+fecha+"' AND "+
-                   CAMPO_DIRECCION+"= '"+direccion+"' AND "+CAMPO_DIAGNOSTICO+"= '"+diagnostico+"' ; ", null);
-
-
-            for (int cnt=0;cnt <medicamentos.size(); cnt++) {
-                    int id = cursor.getInt(cursor.getColumnIndex(CAMPO_ID_RECETA));
-                    String med = medicamentos.get(cnt);
-                    String insertM = "INSERT INTO " + TABLA_MEDICAMENTOS + " ( " + CAMPO_ID_RECETA + ","
-                            + CAMPO_MEDICAMENTO+ ")"
-                            + "VALUES ( '" + id + "', '" + med  + "')";
-
-                    dv.execSQL(insertM);
-
-            }
-            cursor.close();
-            dv.close();
-        }
 
         db.close();
 
@@ -338,6 +327,21 @@ public class CrearRecetaActivity extends AppCompatActivity {
         Toast.makeText(getApplicationContext(), "Receta Lista, Imprimiendo...", Toast.LENGTH_SHORT).show();
 
 
+    }
+
+    public String calculaEdad(String fechaNac) {
+        String[] fecha = fechaNac.split("-");
+        Calendar today = Calendar.getInstance();
+
+        int diff_year = today.get(Calendar.YEAR) -  Integer.parseInt(fecha[2]);
+        int diff_month = today.get(Calendar.MONTH) - Integer.parseInt(fecha[1]);
+        int diff_day = today.get(Calendar.DAY_OF_MONTH) - Integer.parseInt(fecha[0]);
+
+        //Si está en ese año pero todavía no los ha cumplido
+        if (diff_month < 0 || (diff_month == 0 && diff_day < 0)) {
+            diff_year = diff_year - 1; //no aparecían los dos guiones del postincremento :|
+        }
+        return Integer.toString(diff_year);
     }
 
 }
