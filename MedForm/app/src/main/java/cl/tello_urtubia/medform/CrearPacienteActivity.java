@@ -109,11 +109,11 @@ public class CrearPacienteActivity extends AppCompatActivity {
 
         SQLiteDatabase db = conn.getWritableDatabase();
 
-        String insert = "INSERT INTO "+Utilidades.TABLA_PACIENTE+" ( "+Utilidades.CAMPO_NOMBRE+","
+        String insertR = "INSERT INTO "+Utilidades.TABLA_PACIENTE+" ( "+Utilidades.CAMPO_NOMBRE+","
                 +Utilidades.CAMPO_RUT+","+Utilidades.CAMPO_FECHA+","+Utilidades.CAMPO_SEXO+","+Utilidades.CAMPO_DIRECCION+")"
                 + "VALUES ( '"+nombre+"', '"+rut+"', '" +fecha+"', '"+sexo+"', '"+direccion+"')" ;
 
-        db.execSQL(insert);
+        db.execSQL(insertR);
 
         Toast.makeText(getApplicationContext(), "Paciente Registrado", Toast.LENGTH_SHORT).show();
 

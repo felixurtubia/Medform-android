@@ -2,12 +2,12 @@ package cl.tello_urtubia.medform;
 
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.pdf.PdfDocument;
-import android.icu.util.Calendar;
 import android.os.Build;
 import android.os.CancellationSignal;
 import android.os.ParcelFileDescriptor;
@@ -31,16 +31,22 @@ import android.widget.Toast;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 
 import cl.tello_urtubia.medform.Utilidades.Utilidades;
 
 import static cl.tello_urtubia.medform.R.id.campoDireccion;
 import static cl.tello_urtubia.medform.R.id.campoFecha;
 import static cl.tello_urtubia.medform.R.id.campoRut;
+import static cl.tello_urtubia.medform.Utilidades.Utilidades.*;
+import static cl.tello_urtubia.medform.Utilidades.Utilidades.CAMPO_NOMBRE;
 
 public class CrearRecetaActivity extends AppCompatActivity {
 
     EditText campoMedicamento, campoDiagnostico;
+    ArrayList<String> medicamentos = new ArrayList<String>();
+    String diagnostico;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -72,7 +78,26 @@ public class CrearRecetaActivity extends AppCompatActivity {
             case R.id.action_settings:
                 break;
             case R.id.action_print:
+                String nombre = getIntent().getStringExtra("nombre");
+                String rut = getIntent().getStringExtra("rut");
+                String sexo = getIntent().getStringExtra("sexo");
+                String fecha = getIntent().getStringExtra("fecha");
+                String direccion = getIntent().getStringExtra("direccion");
+
+                registrarRecetasSQL(nombre, rut, sexo, fecha, direccion, medicamentos, diagnostico);
+
+                PrintManager printManager = (PrintManager) this
+                        .getSystemService(Context.PRINT_SERVICE);
+
+                String jobName = this.getString(R.string.app_name) +
+                        " Document";
+
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                    printManager.print(jobName, new MyPrintDocumentAdapter(this),
+                            null);
+                }
                 break;
+
             case android.R.id.home:
                 Intent homeIntent = new Intent(this, MainActivity.class);
                 startActivity(homeIntent);
@@ -81,17 +106,16 @@ public class CrearRecetaActivity extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
+    public void agregarDiagnostico (View view){
+        diagnostico = campoDiagnostico.getText().toString();
+        Toast.makeText(getApplicationContext(), "Diagnostico agregado, Si quiere puede editarlo.", Toast.LENGTH_LONG).show();
+        campoDiagnostico.setText("");
+    }
 
-    public void onClick (View view) {
-        String nombre = getIntent().getStringExtra("nombre");
-        String rut = getIntent().getStringExtra("rut");
-        String medicamento = campoMedicamento.getText().toString();
-        String diagnostico = campoDiagnostico.getText().toString();
-        registrarRecetasSQL(nombre, rut, medicamento, diagnostico);
-        crearArchivoReceta(nombre,rut,medicamento,diagnostico);
-
-        Intent intent = new Intent(this,MainActivity.class); // Luego de crear la receta, volvemos al inicio
-        startActivity(intent);
+    public void agregarMedicamento(View view){
+        medicamentos.add(campoMedicamento.getText().toString());
+        Toast.makeText(getApplicationContext(), "Medicamento agregado, Si quiere puede agregar otro.", Toast.LENGTH_LONG).show();
+        campoMedicamento.setText("");
     }
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
@@ -137,6 +161,7 @@ public class CrearRecetaActivity extends AppCompatActivity {
         }
 
 
+        @RequiresApi(api = Build.VERSION_CODES.N)
         @Override
         public void onWrite(final PageRange[] pageRanges,
                             final ParcelFileDescriptor destination,
@@ -189,11 +214,17 @@ public class CrearRecetaActivity extends AppCompatActivity {
         }
 
 
+        @RequiresApi(api = Build.VERSION_CODES.N)
         private void drawPage(PdfDocument.Page page,
                               int pagenumber) {
             Canvas canvas = page.getCanvas();
 
             pagenumber++; // Make sure page numbers start at 1
+            String nombre = getIntent().getStringExtra("nombre");
+            String rut = getIntent().getStringExtra("rut");
+            String sexo = getIntent().getStringExtra("sexo");
+            String fecha = getIntent().getStringExtra("fecha");
+            String direccion = getIntent().getStringExtra("direccion");
 
             Paint paint = new Paint();
             paint.setColor(Color.BLACK);
@@ -211,41 +242,47 @@ public class CrearRecetaActivity extends AppCompatActivity {
             paint.setTextSize(18);
             canvas.drawText("Nombre: ", 65, 175, paint);
             canvas.drawLine(140, 175, 560, 175, paint);
-            canvas.drawText("José Tello", 140, 175, paint);
+            canvas.drawText(nombre, 140, 175, paint);
 
             canvas.drawText("RUT:", 65, 200, paint);
             canvas.drawLine(105, 200, 290, 200, paint);
-            canvas.drawText("19241676-0", 105, 200, paint);
+            canvas.drawText(rut, 105, 200, paint);
 
             canvas.drawText("Fecha: ", 300, 200, paint);
             canvas.drawLine(360, 200, 560, 200, paint);
-            canvas.drawText("09/03/96", 360, 200, paint);
+            canvas.drawText(fecha, 360, 200, paint);
 
             canvas.drawText("Sexo: ", 65, 225, paint);
             canvas.drawLine(115, 225, 210, 225, paint);
-            canvas.drawText("Masculino", 115, 225, paint);
+            canvas.drawText(sexo, 115, 225, paint);
 
             canvas.drawText("Dirección: ", 220, 225, paint);
             canvas.drawLine(305, 225, 560, 225, paint);
-            canvas.drawText("Calle Siempre Viva 123", 305, 225, paint);
+            canvas.drawText(direccion, 305, 225, paint);
 
 
             canvas.drawText("Diagnóstico: ", 65, 250, paint);
             canvas.drawLine(175, 250, 560, 250, paint);
-            canvas.drawText("Flojitis Aguda", 175, 250, paint);
+            try {
+                canvas.drawText(diagnostico, 175, 250, paint);
+            }
+            catch (Exception e){
+                canvas.drawText("Sin Diagnóstico", 175, 250, paint);
+            }
 
             canvas.drawText("Medicamentos: ", 65, 310, paint);
             canvas.drawLine(65, 310, 100, 310, paint);
+            try{
+            for (int cnt=0;cnt <medicamentos.size(); cnt++) {
+                String med = medicamentos.get(cnt);
+                canvas.drawCircle(80, 330 + (cnt * 20), 5, paint);
+                canvas.drawText(med, 90, 335 + (cnt * 20), paint);
+            }
+            }
+           catch(Exception e){
+                canvas.drawText("Sin Medicamentos", 90, 335 , paint);
+            }
 
-            //Aqui debiera ir un for, ya que son 1...* medicamentos, pero para saber como irá haremos solo un medicamento
-            //El sgte. codigo se repeteria por cada iteracion y se sumaria un delta a cada canvas respecto a la variable y
-            canvas.drawCircle(80, 330, 5, paint);
-            canvas.drawText("Paracetamol 500 mg c/8 horas", 90, 335, paint);
-
-           //Calendar rightNow = Calendar.getInstance(); Nose porque explota con estooooo
-            //int day = rightNow.DAY_OF_MONTH;
-            //int month = rightNow.MONTH;
-            //int year = rightNow.YEAR;
 
 
             canvas.drawText("Fecha: ", 65, 720, paint);
@@ -259,39 +296,48 @@ public class CrearRecetaActivity extends AppCompatActivity {
 
     }
 
-    public void printDocument(View view)
-    {
-        PrintManager printManager = (PrintManager) this
-                .getSystemService(Context.PRINT_SERVICE);
-
-        String jobName = this.getString(R.string.app_name) +
-                " Document";
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            printManager.print(jobName, new MyPrintDocumentAdapter(this),
-                    null);
-        }
-    }
-
-    public void crearArchivoReceta(String nombre, String rut, String medicamento, String diagnostico) {
-
-    }
-
-    public void registrarRecetasSQL(String nombre, String rut, String medicamento, String diagnostico) {
+    public void registrarRecetasSQL(String nombre, String rut, String sexo, String fecha, String direccion, ArrayList<String> medicamentos, String diagnostico) {
 
         RecetaSQLHelper conn = new RecetaSQLHelper(this, "bd_recetas", null, 1);
 
         SQLiteDatabase db = conn.getWritableDatabase();
 
-        String insert = "INSERT INTO "+ Utilidades.TABLA_RECETA+" ( "+Utilidades.CAMPO_NOMBRE+","
-                +Utilidades.CAMPO_RUT+","+Utilidades.CAMPO_MEDICAMENTO+","+Utilidades.CAMPO_DIAGNOSTICO+")"
-                + "VALUES ( '"+nombre+"', '"+rut+"', '" +medicamento+"', '"+diagnostico+"' )" ;
 
-        db.execSQL(insert);
+        String insertR = "INSERT INTO "+ TABLA_RECETA+" ( "+ CAMPO_NOMBRE+","
+                + CAMPO_RUT+","+CAMPO_FECHA+","+CAMPO_SEXO+","+CAMPO_DIRECCION+","+CAMPO_DIAGNOSTICO+")"
+                + "VALUES ( '"+nombre+"', '"+rut+"', '"+fecha+"', '"+sexo+"', '"+direccion+"', '"+diagnostico+"' )" ;
+
+        db.execSQL(insertR);
+
+       if (medicamentos.size() > 0){
+           MedicamentoSQLHelper conz = new MedicamentoSQLHelper(this, "bd_medicamentos", null, 1);
+           SQLiteDatabase dv = conz.getWritableDatabase();
+
+           Cursor cursor = db.rawQuery("SELECT "+CAMPO_ID_RECETA+" FROM "+TABLA_RECETA+" WHERE "+CAMPO_NOMBRE+"= '"+nombre
+                   +"' AND "+CAMPO_RUT+"= '"+rut+"' AND "+CAMPO_SEXO+"= '"+sexo+"' AND "+CAMPO_FECHA+"='"+fecha+"' AND "+
+                   CAMPO_DIRECCION+"= '"+direccion+"' AND "+CAMPO_DIAGNOSTICO+"= '"+diagnostico+"' ; ", null);
+
+
+            for (int cnt=0;cnt <medicamentos.size(); cnt++) {
+                    int id = cursor.getInt(cursor.getColumnIndex(CAMPO_ID_RECETA));
+                    String med = medicamentos.get(cnt);
+                    String insertM = "INSERT INTO " + TABLA_MEDICAMENTOS + " ( " + CAMPO_ID_RECETA + ","
+                            + CAMPO_MEDICAMENTO+ ")"
+                            + "VALUES ( '" + id + "', '" + med  + "')";
+
+                    dv.execSQL(insertM);
+
+            }
+            cursor.close();
+            dv.close();
+        }
+
+        db.close();
+
 
         Toast.makeText(getApplicationContext(), "Receta Lista, Imprimiendo...", Toast.LENGTH_SHORT).show();
 
-        db.close(); // MIRA FELIX CULIAO PA QUE VEIA QUE CIERRO LAS CONEXIONES A LAS BASES DE DATOS
+
     }
 
 }

@@ -30,10 +30,6 @@ public class DatosPacienteActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_datospaciente);
         setSupportActionBar(toolbar);
 
-
-
-
-        Intent intent = getIntent();
         String nombre = getIntent().getStringExtra("nombre");
         String rut = getIntent().getStringExtra("rut");
         String sexo = getIntent().getStringExtra("sexo");
@@ -116,10 +112,16 @@ public class DatosPacienteActivity extends AppCompatActivity {
     public void vistaCrearReceta(){
         String rut = getIntent().getStringExtra("rut");
         String nombre = getIntent().getStringExtra("nombre");
+        String sexo = getIntent().getStringExtra("sexo");
+        String fecha = getIntent().getStringExtra("fecha");
+        String direccion = getIntent().getStringExtra("direccion");
 
         Intent intent_vistaReceta = new Intent(this, CrearRecetaActivity.class);
         intent_vistaReceta.putExtra("rut", rut);
         intent_vistaReceta.putExtra("nombre", nombre);
+        intent_vistaReceta.putExtra("sexo",sexo);
+        intent_vistaReceta.putExtra("fecha", fecha);
+        intent_vistaReceta.putExtra("direccion",direccion);
         startActivity(intent_vistaReceta);
 
     }

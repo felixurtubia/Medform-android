@@ -117,7 +117,7 @@ public class ListaPacientesActivity extends AppCompatActivity {
 
             listaPaciente.add(paciente); 
         }
-        /* TODO(5) Falta cerrar el cursor y la base de datos :O !!! Va a exlpotar !!!*/
+
         obtenerLista();
 
         cursor.close();
