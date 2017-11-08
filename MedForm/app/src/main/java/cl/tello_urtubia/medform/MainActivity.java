@@ -18,6 +18,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.Calendar;
+
 import cl.tello_urtubia.medform.Utilidades.Utilidades;
 
 public class MainActivity extends AppCompatActivity {
@@ -38,9 +40,7 @@ public class MainActivity extends AppCompatActivity {
         conn = new ConexionSQLHelper(getApplicationContext(), "bd_pacientes", null, 1);
 
         campoRut = (EditText) findViewById(R.id.main_RutPaciente_et);
-
-
-
+        
     }
 
     @Override
@@ -128,6 +128,5 @@ public class MainActivity extends AppCompatActivity {
 
 
     }
-
 
 }
