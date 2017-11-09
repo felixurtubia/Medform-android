@@ -1,70 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<android.support.v4.widget.DrawerLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorAccent"
-    android:orientation="vertical"
-    tools:context="cl.tello_urtubia.medform.MainActivity">
-
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:background="?attr/colorPrimary"
-        android:elevation="4dp"
-        android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
-        app:popupTheme="@style/AppTheme.PopupOverlay" />
-
-
+    tools:context="cl.tello_urtubia.medform.MainActivity"
+    android:id="@+id/drawer_layout">
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:gravity="center">
-        <Button
-            android:id="@+id/lista_pacientes_button"
-            style="@style/BotonMenuInicio"
-            android:text="@string/main_ListaPacientes"
-            android:onClick="inicioOptionsSelected"/>
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            android:elevation="4dp"
+            android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
+            app:popupTheme="@style/AppTheme.PopupOverlay" />
 
-        <Button
-            android:id="@+id/historial_recetas_button"
-            style="@style/BotonMenuInicio"
-            android:text="@string/main_HistorialRecetas"
-            android:onClick="inicioOptionsSelected"/>
+        <ListView
+            android:id="@+id/listViewPacientes"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            />
+
 
     </LinearLayout>
 
-    <TextView
+    <android.support.design.widget.NavigationView
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/main_rut"
-        android:gravity="center_horizontal"
-        android:layout_gravity="center_horizontal"
-        android:textSize="24sp"
-        android:textColor="@color/colorPrimaryDark"
-        android:paddingTop="32dp"
-        />
-    <EditText
-        android:id="@+id/main_RutPaciente_et"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:hint="@string/main_rutHint"
-        android:layout_gravity="center_horizontal"
-        android:gravity="start"
-        android:layout_margin="16dp"/>
-    <Button
-        android:id="@+id/buscar_paciente_button"
-        android:layout_width="200dp"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:background="@color/colorPrimaryDark"
-        android:textColor="@color/colorAccent"
-        android:text="@string/main_BuscarPaciente"
-        android:textSize="16sp"
-        android:onClick="inicioOptionsSelected"/>
+        android:layout_height="match_parent"
+        app:menu="@menu/navigation_menu"
+        android:layout_marginTop="?attr/actionBarSize"
+        android:layout_gravity="start"
+        android:id="@+id/nav_view">
 
-</LinearLayout>
+    </android.support.design.widget.NavigationView>
+
+
+
+
+</android.support.v4.widget.DrawerLayout>

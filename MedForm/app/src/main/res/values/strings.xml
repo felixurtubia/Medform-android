@@ -37,8 +37,12 @@
 
     <string name="crear_ultima_receta">Última receta</string>
     <string name="action_search">Buscar</string>
+
     <string name="agregar_diagnostico_hint">Escribir  diagnóstico, Considere 30 caracteres</string>
     <string name="agregar_medicamento_hint">Escribir medicamento, Considere 40 caracteres</string>
+    <string name="open_dl">Open</string>
+    <string name="close_dl">Close</string>
+
 
     <string-array name="sexo_paciente">
         <item>Femenino</item>
