@@ -62,4 +62,7 @@ public class Paciente {
     public void setDireccion(String direccion) {
         this.direccion = direccion;
     }
+    public String getName() {
+        return rut + " - " + nombre;
+    }
 }
