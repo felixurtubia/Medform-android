@@ -51,7 +51,9 @@
         android:layout_height="wrap_content"
         android:hint="@string/agregar_diagnostico_hint"
         android:inputType="text"
-        android:layout_margin="8dp"/>
+        android:layout_margin="8dp"
+        android:maxLength="30"
+        />
 
     <LinearLayout
         android:id="@+id/diagnostico_ll"
@@ -85,6 +87,7 @@
             android:background="@color/colorAccent"
             android:scaleType="centerCrop"
             android:onClick="agregarMedicamento"
+            android:maxLength = "40"
             />
 
     </LinearLayout>
@@ -95,7 +98,9 @@
         android:layout_height="wrap_content"
         android:hint="@string/agregar_medicamento_hint"
         android:inputType="text"
-        android:layout_margin="8dp"/>
+        android:maxLength="40"
+        android:layout_margin="8dp"
+        />
 
     <LinearLayout
         android:id="@+id/medicamentos_ll"
