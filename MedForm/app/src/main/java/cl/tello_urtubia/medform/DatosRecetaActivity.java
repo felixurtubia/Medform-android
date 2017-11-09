@@ -117,7 +117,7 @@ public class DatosRecetaActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_datos_paciente, menu);
+        getMenuInflater().inflate(R.menu.menu_datos_receta, menu);
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
         return true;
@@ -128,13 +128,10 @@ public class DatosRecetaActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         switch (id) {
-            case R.id.action_editar_paciente:
-                editarPaciente();
+            case R.id.action_eliminar_receta:
+                eliminarReceta();
                 break;
-            case R.id.action_eliminar_paciente:
-                eliminarPaciente();
-                break;
-            case R.id.action_nueva_receta:
+            case R.id.action_generar_receta:
                 PrintManager printManager = (PrintManager) this
                         .getSystemService(Context.PRINT_SERVICE);
 
@@ -344,11 +341,11 @@ public class DatosRecetaActivity extends AppCompatActivity {
 
     }
 
-    public void eliminarPaciente() {
+    public void eliminarReceta() {
 
         // Luego de eliminar al paciente, se envia un toast y se envia al mainActivity
 
-        ConexionSQLHelper conn = new ConexionSQLHelper(this, "bd_receta", null, 1);
+        ConexionSQLHelper conn = new ConexionSQLHelper(this, "bd_recetas", null, 1);
 
         SQLiteDatabase db = conn.getWritableDatabase();
 
@@ -364,30 +361,6 @@ public class DatosRecetaActivity extends AppCompatActivity {
         startActivity(intentMain);
     }
 
-
-
-    public void editarPaciente() {
-
-        String rut = getIntent().getStringExtra("rut");
-        String nombre = getIntent().getStringExtra("nombre");
-        String sexo = getIntent().getStringExtra("sexo");
-        String fecha = getIntent().getStringExtra("fecha");
-        String direccion = getIntent().getStringExtra("direccion");
-
-
-        Intent intent = new Intent();
-        intent.setClass(this, EditarPacienteActivity.class);
-        intent.putExtra("rut", rut);
-        intent.putExtra("nombre", nombre);
-        intent.putExtra("sexo", sexo);
-        intent.putExtra("fecha", fecha);
-        intent.putExtra("direccion", direccion);
-
-
-
-        startActivity(intent);
-
-    }
 
     public String calculaEdad(String fechaNac) {
         String[] fecha = fechaNac.split("-");
