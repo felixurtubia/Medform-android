@@ -22,7 +22,7 @@ public class Utilidades {
     public static final String TABLA_RECETA= "receta";
     public static final String CAMPO_ID_RECETA = "_id_r";
     public static final String CAMPO_DIAGNOSTICO= "diagnostico";
-    public static final String CAMPO_FECHA_ACTUAL= "DateCreated";
+    public static final String CAMPO_FECHA_ACTUAL= "DateActual";
 
 
 

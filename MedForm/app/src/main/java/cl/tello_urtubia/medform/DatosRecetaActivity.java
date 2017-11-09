@@ -117,7 +117,7 @@ public class DatosRecetaActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_datos_paciente, menu);
+        getMenuInflater().inflate(R.menu.menu_datos_receta, menu);
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
         return true;
