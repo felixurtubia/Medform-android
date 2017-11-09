@@ -128,7 +128,8 @@ android:id="@+id/drawer_layout">
         android:layout_height="match_parent"
         app:menu="@menu/navigation_menu"
         android:layout_marginTop="?attr/actionBarSize"
-        android:layout_gravity="start">
+        android:layout_gravity="start"
+        android:id="@+id/nav_view">
 
     </android.support.design.widget.NavigationView>
 

@@ -17,7 +17,10 @@ import android.print.PrintDocumentAdapter;
 import android.print.PrintDocumentInfo;
 import android.print.PrintManager;
 import android.print.pdf.PrintedPdfDocument;
+import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
+import android.support.design.widget.NavigationView;
+import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -33,9 +36,9 @@ import android.widget.Toast;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.time.LocalDate;
-import java.time.Period;
-import java.time.format.DateTimeFormatter;
+//import java.time.LocalDate;
+//import java.time.Period;
+//import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Calendar;
 
@@ -47,7 +50,7 @@ import static cl.tello_urtubia.medform.R.id.campoRut;
 import static cl.tello_urtubia.medform.Utilidades.Utilidades.*;
 import static cl.tello_urtubia.medform.Utilidades.Utilidades.CAMPO_NOMBRE;
 
-public class CrearRecetaActivity extends AppCompatActivity {
+public class CrearRecetaActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     EditText campoMedicamento, campoDiagnostico;
     ArrayList<String> medicamentos = new ArrayList<String>();
@@ -71,6 +74,8 @@ public class CrearRecetaActivity extends AppCompatActivity {
         drawerLayout.addDrawerListener(mToggle);
         mToggle.syncState();
 
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
         campoMedicamento = (EditText) findViewById(R.id.campoMedicamento);
         campoDiagnostico = (EditText) findViewById(R.id.campoDiagnostico);
 
@@ -356,6 +361,32 @@ public class CrearRecetaActivity extends AppCompatActivity {
             diff_year = diff_year - 1; //no aparecían los dos guiones del postincremento :|
         }
         return Integer.toString(diff_year);
+    }
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        int id = item.getItemId();
+        Intent intent = null;
+        if (id == R.id.nav_lista_pacientes) {
+            intent = new Intent(this, MainActivity.class);
+            startActivity(intent);
+            return true;
+        } else if (id == R.id.nav_historial_recetas) {
+            intent = new Intent(this, HistorialRecetasActivity.class);
+            startActivity(intent);
+            return true;
+        } else if (id == R.id.nav_datos_medico) {
+            /**intent = new Intent(this, DatosMedico.class);
+             startActivity(intent);**/
+
+        } else if (id == R.id.nav_ajustes) {
+            /**intent = new intent(this, Ajustes.class);
+             startActivity(intent);**/
+
+        }
+
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawer.closeDrawer(GravityCompat.START);
+        return true;
     }
 
 }

@@ -2,6 +2,9 @@ package cl.tello_urtubia.medform;
 
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
+import android.support.annotation.NonNull;
+import android.support.design.widget.NavigationView;
+import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -18,7 +21,7 @@ import android.widget.Toast;
 
 import cl.tello_urtubia.medform.Utilidades.Utilidades;
 
-public class DatosPacienteActivity extends AppCompatActivity {
+public class DatosPacienteActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     private DrawerLayout drawerLayout;
     private ActionBarDrawerToggle mToggle;
@@ -40,6 +43,8 @@ public class DatosPacienteActivity extends AppCompatActivity {
         mToggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.open_dl, R.string.close_dl);
         drawerLayout.addDrawerListener(mToggle);
         mToggle.syncState();
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
 
         String nombre = getIntent().getStringExtra("nombre");
         String rut = getIntent().getStringExtra("rut");
@@ -160,5 +165,32 @@ public class DatosPacienteActivity extends AppCompatActivity {
 
         startActivity(intent);
 
+    }
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        int id = item.getItemId();
+        Intent intent = null;
+        if (id == R.id.nav_lista_pacientes) {
+            intent = new Intent(this, MainActivity.class);
+            startActivity(intent);
+            return true;
+        } else if (id == R.id.nav_historial_recetas) {
+            intent = new Intent(this, HistorialRecetasActivity.class);
+            startActivity(intent);
+            return true;
+
+        } else if (id == R.id.nav_datos_medico) {
+            /**intent = new Intent(this, DatosMedico.class);
+             startActivity(intent);**/
+
+        } else if (id == R.id.nav_ajustes) {
+            /**intent = new intent(this, Ajustes.class);
+             startActivity(intent);**/
+
+        }
+
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawer.closeDrawer(GravityCompat.START);
+        return true;
     }
 }
