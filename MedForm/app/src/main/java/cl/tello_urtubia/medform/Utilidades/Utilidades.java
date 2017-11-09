@@ -22,11 +22,13 @@ public class Utilidades {
     public static final String TABLA_RECETA= "receta";
     public static final String CAMPO_ID_RECETA = "_id_r";
     public static final String CAMPO_DIAGNOSTICO= "diagnostico";
+    public static final String CAMPO_FECHA_ACTUAL= "DateCreated";
+
 
 
     public static final String CREAR_TABLA_RECETA = "CREATE TABLE "+TABLA_RECETA+" ("+CAMPO_ID_RECETA+" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT" +
             ", "+CAMPO_NOMBRE+" TEXT, "+CAMPO_RUT+" TEXT, "+CAMPO_FECHA+" TEXT, "+CAMPO_SEXO+" TEXT, "+CAMPO_DIRECCION+"" +
-            " TEXT, "+CAMPO_DIAGNOSTICO+" TEXT ); ";
+            " TEXT, "+CAMPO_DIAGNOSTICO+" TEXT, "+CAMPO_FECHA_ACTUAL+" TEXT ); ";
 
 
 

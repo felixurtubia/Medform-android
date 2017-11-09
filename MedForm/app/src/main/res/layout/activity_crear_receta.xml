@@ -58,7 +58,8 @@ android:id="@+id/drawer_layout">
             android:layout_height="wrap_content"
             android:hint="@string/agregar_diagnostico_hint"
             android:inputType="text"
-            android:layout_margin="8dp"/>
+            android:layout_margin="8dp"
+            android:maxLength="30"/>
 
         <LinearLayout
             android:id="@+id/diagnostico_ll"
@@ -102,6 +103,7 @@ android:id="@+id/drawer_layout">
             android:layout_height="wrap_content"
             android:hint="@string/agregar_medicamento_hint"
             android:inputType="text"
+            android:maxLength="40"
             android:layout_margin="8dp"/>
 
         <LinearLayout
@@ -125,6 +127,7 @@ android:id="@+id/drawer_layout">
         android:id="@+id/nav_view">
 
     </android.support.design.widget.NavigationView>
+
 
 
 

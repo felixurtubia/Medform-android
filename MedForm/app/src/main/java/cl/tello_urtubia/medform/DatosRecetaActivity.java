@@ -1,5 +1,6 @@
 package cl.tello_urtubia.medform;
 
+
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
@@ -9,6 +10,7 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.pdf.PdfDocument;
 import android.os.Build;
+import android.os.Bundle;
 import android.os.CancellationSignal;
 import android.os.ParcelFileDescriptor;
 import android.print.PageRange;
@@ -17,21 +19,15 @@ import android.print.PrintDocumentAdapter;
 import android.print.PrintDocumentInfo;
 import android.print.PrintManager;
 import android.print.pdf.PrintedPdfDocument;
-import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
-import android.support.design.widget.NavigationView;
-import android.support.v4.view.GravityCompat;
-import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.text.format.Time;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.EditText;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.FileOutputStream;
@@ -39,76 +35,106 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 
-import static cl.tello_urtubia.medform.Utilidades.Utilidades.*;
-import static cl.tello_urtubia.medform.Utilidades.Utilidades.CAMPO_NOMBRE;
+import cl.tello_urtubia.medform.Utilidades.Utilidades;
 
-public class CrearRecetaActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+import static cl.tello_urtubia.medform.Utilidades.Utilidades.CAMPO_FECHA_ACTUAL;
+import static cl.tello_urtubia.medform.Utilidades.Utilidades.CAMPO_ID_RECETA;
+import static cl.tello_urtubia.medform.Utilidades.Utilidades.TABLA_MEDICAMENTOS;
+import static cl.tello_urtubia.medform.Utilidades.Utilidades.TABLA_RECETA;
 
-    EditText campoMedicamento, campoDiagnostico;
-    ArrayList<String> medicamentos = new ArrayList<String>();
-    String diagnostico;
-    private DrawerLayout drawerLayout;
-    private ActionBarDrawerToggle mToggle;
+public class DatosRecetaActivity extends AppCompatActivity {
+
+    String rut;
+    String nombre;
+    String sexo;
+    String fecha ;
+    String direccion ;
+    String diagnostico ;
+    String DateActual ;
+    ListView listViewMedicamentos;
+    ArrayList<String> medicamentos = new ArrayList<String>();;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+        rut = getIntent().getStringExtra("rut");
+        nombre = getIntent().getStringExtra("nombre");
+        sexo = getIntent().getStringExtra("sexo");
+        fecha = getIntent().getStringExtra("fecha");
+        direccion = getIntent().getStringExtra("direccion");
+        diagnostico = getIntent().getStringExtra("diagnostico");
+        DateActual = getIntent().getStringExtra("DateActual");
+
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_crear_receta);
-
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_crearReceta);
+        setContentView(R.layout.activity_datos_receta);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_datosReceta);
         setSupportActionBar(toolbar);
-        ActionBar actionBar = getSupportActionBar();
-        actionBar.setDisplayHomeAsUpEnabled(true);
-        actionBar.setHomeButtonEnabled(true);
 
-        drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-        mToggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.open_dl, R.string.close_dl);
-        drawerLayout.addDrawerListener(mToggle);
-        mToggle.syncState();
+        obtenerMedicamentos();
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
-        campoMedicamento = (EditText) findViewById(R.id.campoMedicamento);
-        campoDiagnostico = (EditText) findViewById(R.id.campoDiagnostico);
+
+        TextView rut_tv = (TextView) findViewById(R.id.rutPaciente_tv);
+        TextView nombre_tv = (TextView) findViewById(R.id.nombrePaciente_tv);
+        TextView diagnostico_tv = (TextView) findViewById(R.id.diagnostico_receta);
+        TextView DateActual_tv = (TextView) findViewById(R.id.datehourcreated_receta);
+
+        rut_tv.setText(rut);
+        nombre_tv.setText(nombre);
+        diagnostico_tv.setText(diagnostico);
+        DateActual_tv.setText(DateActual);
+
+        listViewMedicamentos = (ListView) findViewById(R.id.listViewMedicamentos);
+        ArrayAdapter adaptador = new ArrayAdapter(this, android.R.layout.simple_expandable_list_item_1,medicamentos);
+        listViewMedicamentos.setAdapter(adaptador);
+
+
+    }
+
+    public void obtenerMedicamentos() {
+        MedicamentoSQLHelper monn = new MedicamentoSQLHelper(this, "bd_medicamentos", null,1 );
+        RecetaSQLHelper ronn = new RecetaSQLHelper(this, "bd_recetas", null, 1);
+        SQLiteDatabase db = monn.getReadableDatabase() ;
+        SQLiteDatabase rb = ronn.getReadableDatabase();
+
+        Cursor cursor1 = rb.rawQuery("SELECT * FROM "+TABLA_RECETA+" WHERE "+CAMPO_FECHA_ACTUAL+"= '"+DateActual+"'", null);
+        while (cursor1.moveToNext()){
+
+            Cursor cursor2 = db.rawQuery("SELECT * FROM "+TABLA_MEDICAMENTOS+" WHERE "+CAMPO_ID_RECETA+"= "+cursor1.getInt(0)+"",null);
+            while(cursor2.moveToNext()){
+                String med = cursor2.getString(2);
+                medicamentos.add(med);
+            }
+
+            cursor2.close();
+
+        }
+
+        db.close();
+        rb.close();
+        cursor1.close();
 
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_crear_receta, menu);
+        getMenuInflater().inflate(R.menu.menu_datos_paciente, menu);
         ActionBar actionBar = getSupportActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(true);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (mToggle.onOptionsItemSelected(item)) {
-            return true;
-        }
         int id = item.getItemId();
 
         switch (id) {
-            case R.id.action_user_settings:
+            case R.id.action_editar_paciente:
+                editarPaciente();
                 break;
-            case R.id.action_settings:
+            case R.id.action_eliminar_paciente:
+                eliminarPaciente();
                 break;
-            case R.id.action_print:
-                String nombre = getIntent().getStringExtra("nombre");
-                String rut = getIntent().getStringExtra("rut");
-                String sexo = getIntent().getStringExtra("sexo");
-                String fecha = getIntent().getStringExtra("fecha");
-                String direccion = getIntent().getStringExtra("direccion");
-
-                if (diagnostico == null){
-                    diagnostico = "Sin Diagnostico";
-                }
-
-                if (medicamentos.size() == 0){
-                    medicamentos.add("Sin Medicamentos");
-                }
-
-                registrarRecetasSQL(nombre, rut, sexo, fecha, direccion, medicamentos, diagnostico);
-
+            case R.id.action_nueva_receta:
                 PrintManager printManager = (PrintManager) this
                         .getSystemService(Context.PRINT_SERVICE);
 
@@ -116,29 +142,26 @@ public class CrearRecetaActivity extends AppCompatActivity implements Navigation
                         " Document";
 
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-                    printManager.print(jobName, new MyPrintDocumentAdapter(this),
+                    printManager.print(jobName, new DatosRecetaActivity.MyPrintDocumentAdapter(this),
                             null);
                 }
                 break;
 
+            case R.id.action_user_settings:
+                break;
+            case R.id.action_settings:
+                break;
             case android.R.id.home:
                 Intent homeIntent = new Intent(this, MainActivity.class);
                 startActivity(homeIntent);
                 return true;
+            default:
+                break;
+
         }
 
-        return super.onOptionsItemSelected(item);
-    }
-    public void agregarDiagnostico (View view){
-        diagnostico = campoDiagnostico.getText().toString();
-        Toast.makeText(getApplicationContext(), "Diagnostico agregado, Si quiere puede editarlo.", Toast.LENGTH_LONG).show();
-        campoDiagnostico.setText("");
-    }
 
-    public void agregarMedicamento(View view){
-        medicamentos.add(campoMedicamento.getText().toString());
-        Toast.makeText(getApplicationContext(), "Medicamento agregado, Si quiere puede agregar otro.", Toast.LENGTH_LONG).show();
-        campoMedicamento.setText("");
+        return super.onOptionsItemSelected(item);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
@@ -243,11 +266,7 @@ public class CrearRecetaActivity extends AppCompatActivity implements Navigation
             Canvas canvas = page.getCanvas();
 
             pagenumber++; // Make sure page numbers start at 1
-            String nombre = getIntent().getStringExtra("nombre");
-            String rut = getIntent().getStringExtra("rut");
-            String sexo = getIntent().getStringExtra("sexo");
-            String fecha = getIntent().getStringExtra("fecha");
-            String direccion = getIntent().getStringExtra("direccion");
+
 
             Paint paint = new Paint();
             paint.setColor(Color.BLACK);
@@ -298,13 +317,13 @@ public class CrearRecetaActivity extends AppCompatActivity implements Navigation
             canvas.drawText("Medicamentos: ", 65, 310, paint);
             canvas.drawLine(65, 310, 100, 310, paint);
             try{
-            for (int cnt=0;cnt <medicamentos.size(); cnt++) {
-                String med = medicamentos.get(cnt);
-                canvas.drawCircle(80, 330 + (cnt * 20), 5, paint);
-                canvas.drawText(med, 90, 335 + (cnt * 20), paint);
+                for (int cnt=0;cnt <medicamentos.size(); cnt++) {
+                    String med = medicamentos.get(cnt);
+                    canvas.drawCircle(80, 330 + (cnt * 20), 5, paint);
+                    canvas.drawText(med, 90, 335 + (cnt * 20), paint);
+                }
             }
-            }
-           catch(Exception e){
+            catch(Exception e){
                 canvas.drawText("Sin Medicamentos", 90, 335 , paint);
             }
 
@@ -325,50 +344,48 @@ public class CrearRecetaActivity extends AppCompatActivity implements Navigation
 
     }
 
-    public void registrarRecetasSQL(String nombre, String rut, String sexo, String fecha, String direccion, ArrayList<String> medicamentos, String diagnostico) {
+    public void eliminarPaciente() {
 
-        RecetaSQLHelper conn = new RecetaSQLHelper(this, "bd_recetas", null, 1);
+        // Luego de eliminar al paciente, se envia un toast y se envia al mainActivity
+
+        ConexionSQLHelper conn = new ConexionSQLHelper(this, "bd_receta", null, 1);
 
         SQLiteDatabase db = conn.getWritableDatabase();
-        String today = Calendar.getInstance().getTime().toString();
 
+        String delete = "DELETE FROM "+ TABLA_RECETA+" WHERE "+Utilidades.CAMPO_FECHA_ACTUAL+"= '"+DateActual+"' ;" ;
 
-        String insertR = "INSERT INTO "+ TABLA_RECETA+" ( "+ CAMPO_NOMBRE+","
-                + CAMPO_RUT+","+CAMPO_FECHA+","+CAMPO_SEXO+","+CAMPO_DIRECCION+","+CAMPO_DIAGNOSTICO+","+CAMPO_FECHA_ACTUAL+")"
-                + "VALUES ( '"+nombre+"', '"+rut+"', '"+fecha+"', '"+sexo+"', '"+direccion+"', '"+diagnostico+"', '"+today+"' )" ;
+        db.execSQL(delete);
 
-        db.execSQL(insertR);
+        Toast.makeText(getApplicationContext(), "Receta Eliminada, Volviendo al inicio", Toast.LENGTH_SHORT).show();
+
         db.close();
 
-        MedicamentoSQLHelper mec = new MedicamentoSQLHelper(this, "bd_medicamentos", null, 1);
-
-        SQLiteDatabase dv = mec.getWritableDatabase();
-        SQLiteDatabase dz = conn.getReadableDatabase();
-
-        Cursor cursor = dz.rawQuery("SELECT "+CAMPO_ID_RECETA+" FROM "+TABLA_RECETA+" WHERE "+CAMPO_FECHA_ACTUAL+"= '"+
-                today+"'", null);
-        while(cursor.moveToNext()){
-            int id = cursor.getInt(0);
-                for (int i = 0; i<medicamentos.size() ; i++){
-                    String med = medicamentos.get(i);
-                    String insertM = "INSERT INTO "+TABLA_MEDICAMENTOS+" ( "+CAMPO_ID_RECETA+", "+CAMPO_MEDICAMENTO+") " +
-                            "VALUES ( "+id+", '"+med+"')";
-                    dv.execSQL(insertM);
+        Intent intentMain = new Intent(this, MainActivity.class);
+        startActivity(intentMain);
+    }
 
 
 
-            }
+    public void editarPaciente() {
 
-        }
+        String rut = getIntent().getStringExtra("rut");
+        String nombre = getIntent().getStringExtra("nombre");
+        String sexo = getIntent().getStringExtra("sexo");
+        String fecha = getIntent().getStringExtra("fecha");
+        String direccion = getIntent().getStringExtra("direccion");
 
-        cursor.close();
-        dv.close();
+
+        Intent intent = new Intent();
+        intent.setClass(this, EditarPacienteActivity.class);
+        intent.putExtra("rut", rut);
+        intent.putExtra("nombre", nombre);
+        intent.putExtra("sexo", sexo);
+        intent.putExtra("fecha", fecha);
+        intent.putExtra("direccion", direccion);
 
 
 
-
-        Toast.makeText(getApplicationContext(), "Receta Lista, Imprimiendo...", Toast.LENGTH_SHORT).show();
-
+        startActivity(intent);
 
     }
 
@@ -386,31 +403,4 @@ public class CrearRecetaActivity extends AppCompatActivity implements Navigation
         }
         return Integer.toString(diff_year);
     }
-    @Override
-    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-        int id = item.getItemId();
-        Intent intent = null;
-        if (id == R.id.nav_lista_pacientes) {
-            intent = new Intent(this, MainActivity.class);
-            startActivity(intent);
-            return true;
-        } else if (id == R.id.nav_historial_recetas) {
-            intent = new Intent(this, HistorialRecetasActivity.class);
-            startActivity(intent);
-            return true;
-        } else if (id == R.id.nav_datos_medico) {
-            /**intent = new Intent(this, DatosMedico.class);
-             startActivity(intent);**/
-
-        } else if (id == R.id.nav_ajustes) {
-            /**intent = new intent(this, Ajustes.class);
-             startActivity(intent);**/
-
-        }
-
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        drawer.closeDrawer(GravityCompat.START);
-        return true;
-    }
-
 }
