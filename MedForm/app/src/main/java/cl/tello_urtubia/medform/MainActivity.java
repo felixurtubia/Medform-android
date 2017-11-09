@@ -1,5 +1,7 @@
 package cl.tello_urtubia.medform;
 
+import android.app.SearchManager;
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -14,10 +16,12 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Adapter;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -35,10 +39,10 @@ import cl.tello_urtubia.medform.Utilidades.Utilidades;
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     ListView listViewpacientes;
-    ArrayList<Paciente> listaPaciente;
-    ArrayList<String> listaInfo;
+    ArrayList<Paciente> listaPaciente = new ArrayList<>();
+    //ArrayList<String> listaInfo;
+    ListItemAdapter adaptador;
     ConexionSQLHelper conn;
-    EditText campoRut;
     private DrawerLayout drawerLayout;
     private ActionBarDrawerToggle mToggle;
 
@@ -61,15 +65,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-
+        // Conexion SQLite y lista de pacientes
         conn = new ConexionSQLHelper(getApplicationContext(), "bd_pacientes", null, 1);
         listViewpacientes = (ListView) findViewById(R.id.listViewPacientes);
 
         consultarListaPacientes();
 
-        ArrayAdapter adaptador = new ArrayAdapter(this, android.R.layout.simple_expandable_list_item_1,listaInfo);
+        adaptador  = new ListItemAdapter(this, listaPaciente);
         listViewpacientes.setAdapter(adaptador);
-
         listViewpacientes.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int pos, long id) {
@@ -77,23 +80,40 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 Intent intent = new Intent();
 
                 intent.setClass(getApplicationContext(), DatosPacienteActivity.class);
-                intent.putExtra("nombre", listaPaciente.get(pos).getNombre());
-                intent.putExtra("rut", listaPaciente.get(pos).getRut());
-                intent.putExtra("sexo", listaPaciente.get(pos).getSexo());
-                intent.putExtra("fecha", listaPaciente.get(pos).getFecha());
-                intent.putExtra("direccion", listaPaciente.get(pos).getDireccion());
+                intent.putExtra("nombre", ((Paciente) adaptador.getItem(pos)).getNombre());
+                intent.putExtra("rut", ((Paciente) adaptador.getItem(pos)).getRut());
+                intent.putExtra("sexo", ((Paciente) adaptador.getItem(pos)).getSexo());
+                intent.putExtra("fecha", ((Paciente) adaptador.getItem(pos)).getFecha());
+                intent.putExtra("direccion", ((Paciente) adaptador.getItem(pos)).getDireccion());
+
 
                 startActivity(intent);
 
             }
         });
-        
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_lista_pacientes, menu);
-        ActionBar actionBar = getSupportActionBar();
+        //SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+        SearchView searchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
+        //searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+        //searchView.setSubmitButtonEnabled(true);
+        //searchView.setIconifiedByDefault(false);
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                adaptador.getFilter().filter(newText);
+                return false;
+            }
+        });
         return true;
     }
 
@@ -113,16 +133,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 startActivity(homeIntent);
                 return true;
         }
-
-
         return super.onOptionsItemSelected(item);
     }
 
-    private void consultarListaPacientes() {
+    public void consultarListaPacientes() {
         SQLiteDatabase db = conn.getReadableDatabase() ;
-
         Paciente paciente = null;
-        listaPaciente = new ArrayList<Paciente>();
         Cursor cursor = db.rawQuery("SELECT * FROM "+ Utilidades.TABLA_PACIENTE, null);
 
         while (cursor.moveToNext()) {
@@ -132,18 +148,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             paciente.setFecha(cursor.getString(3));
             paciente.setSexo(cursor.getString(4));
             paciente.setDireccion(cursor.getString(5));
-
             listaPaciente.add(paciente);
         }
 
-        obtenerLista();
-
+        //obtenerLista();
         cursor.close();
         db.close();
 
     }
 
-    private void obtenerLista() {
+    /**private void obtenerLista() {
 
         listaInfo = new ArrayList<String>();
 
@@ -151,7 +165,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             listaInfo.add(listaPaciente.get(i).getRut()+" - "+ listaPaciente.get(i).getNombre());
 
         }
-    }
+    }**/
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {

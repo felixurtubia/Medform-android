@@ -42,10 +42,12 @@
     <string name="agregar_medicamento_hint">Escribir medicamento, Considere 40 caracteres</string>
     <string name="open_dl">Open</string>
     <string name="close_dl">Close</string>
+    <string name="search_hint">Nombre o rut del paciente</string>
 
 
     <string-array name="sexo_paciente">
         <item>Femenino</item>
         <item>Masculino</item>
     </string-array>
+    <string name="title_activity_searchable">SearchableActivity</string>
 </resources>
