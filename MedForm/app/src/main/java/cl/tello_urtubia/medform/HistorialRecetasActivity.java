@@ -3,8 +3,18 @@ package cl.tello_urtubia.medform;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.support.annotation.NonNull;
+import android.support.design.widget.NavigationView;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.SearchView;
+import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -15,24 +25,38 @@ import java.util.ArrayList;
 import cl.tello_urtubia.medform.Entidades.Receta;
 import cl.tello_urtubia.medform.Utilidades.Utilidades;
 
-public class HistorialRecetasActivity extends AppCompatActivity {
+public class HistorialRecetasActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     ListView listViewrecetas;
     ArrayList<Receta> listaReceta;
     ArrayList<String> listaInfo;
     ConexionSQLHelper conn;
+    private DrawerLayout drawerLayout;
+    private ActionBarDrawerToggle mToggle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_historial_recetas);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_historialRecetas);
+        setSupportActionBar(toolbar);
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(true);
+        actionBar.setHomeButtonEnabled(true);
+
+        drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        mToggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.open_dl, R.string.close_dl);
+        drawerLayout.addDrawerListener(mToggle);
+        mToggle.syncState();
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
 
         conn = new ConexionSQLHelper(getApplicationContext(), "bd_recetas", null, 1);
         listViewrecetas = (ListView) findViewById(R.id.listViewRecetas);
 
         consultarListaRecetas();
 
-        ArrayAdapter adaptador = new ArrayAdapter(this, android.R.layout.simple_expandable_list_item_1,listaInfo);
+        ArrayAdapter adaptador = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1,listaInfo);
         listViewrecetas.setAdapter(adaptador);
 
         listViewrecetas.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -54,6 +78,32 @@ public class HistorialRecetasActivity extends AppCompatActivity {
 
             }
         });
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_lista_pacientes, menu);
+
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (mToggle.onOptionsItemSelected(item)) {
+            return true;
+        }
+        int id = item.getItemId();
+        switch (id) {
+            case R.id.action_user_settings:
+                break;
+            case R.id.action_settings:
+                break;
+            case android.R.id.home:
+                Intent homeIntent = new Intent(this, MainActivity.class);
+                startActivity(homeIntent);
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     private void consultarListaRecetas() {
@@ -92,5 +142,32 @@ public class HistorialRecetasActivity extends AppCompatActivity {
             listaInfo.add(listaReceta.get(i).getRut()+" - "+ listaReceta.get(i).getNombre()+"-"+listaReceta.get(i).getDateActual());
 
         }
+    }
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        int id = item.getItemId();
+        Intent intent = null;
+        if (id == R.id.nav_lista_pacientes) {
+            intent = new Intent(this, MainActivity.class);
+            startActivity(intent);
+            return true;
+        } else if (id == R.id.nav_historial_recetas) {
+            intent = new Intent(this, HistorialRecetasActivity.class);
+            startActivity(intent);
+            return true;
+
+        } else if (id == R.id.nav_datos_medico) {
+            /**intent = new Intent(this, DatosMedico.class);
+             startActivity(intent);**/
+
+        } else if (id == R.id.nav_ajustes) {
+            /**intent = new intent(this, Ajustes.class);
+             startActivity(intent);**/
+
+        }
+
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawer.closeDrawer(GravityCompat.START);
+        return true;
     }
 }

@@ -3,6 +3,7 @@ package cl.tello_urtubia.medform;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.support.annotation.NonNull;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -18,6 +19,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import java.util.Calendar;
 
 import cl.tello_urtubia.medform.Utilidades.Utilidades;
 
@@ -38,6 +41,13 @@ public class DatosPacienteActivity extends AppCompatActivity implements Navigati
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setHomeButtonEnabled(true);
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                vistaCrearReceta();
+            }
+        });
 
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mToggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.open_dl, R.string.close_dl);
@@ -86,8 +96,6 @@ public class DatosPacienteActivity extends AppCompatActivity implements Navigati
             case R.id.action_eliminar_paciente:
                 eliminarPaciente();
                 break;
-            case R.id.action_nueva_receta:
-                vistaCrearReceta();
             case R.id.action_user_settings:
                 break;
             case R.id.action_settings:

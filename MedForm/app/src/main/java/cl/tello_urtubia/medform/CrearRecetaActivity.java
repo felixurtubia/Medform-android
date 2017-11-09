@@ -330,7 +330,10 @@ public class CrearRecetaActivity extends AppCompatActivity implements Navigation
         RecetaSQLHelper conn = new RecetaSQLHelper(this, "bd_recetas", null, 1);
 
         SQLiteDatabase db = conn.getWritableDatabase();
-        String today = Calendar.getInstance().getTime().toString();
+        String ano = Integer.toString(Calendar.getInstance().get(Calendar.YEAR)) ;
+        String mes = Integer.toString(Calendar.getInstance().get(Calendar.MONTH)+1) ;
+        String dia = Integer.toString(Calendar.getInstance().get(Calendar.DAY_OF_MONTH)) ;
+        String today = dia+ "/"+ mes+"/"+ano;
 
 
         String insertR = "INSERT INTO "+ TABLA_RECETA+" ( "+ CAMPO_NOMBRE+","
