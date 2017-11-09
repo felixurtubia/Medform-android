@@ -18,7 +18,9 @@ import android.print.PrintDocumentInfo;
 import android.print.PrintManager;
 import android.print.pdf.PrintedPdfDocument;
 import android.support.annotation.RequiresApi;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -50,6 +52,8 @@ public class CrearRecetaActivity extends AppCompatActivity {
     EditText campoMedicamento, campoDiagnostico;
     ArrayList<String> medicamentos = new ArrayList<String>();
     String diagnostico;
+    private DrawerLayout drawerLayout;
+    private ActionBarDrawerToggle mToggle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,6 +62,14 @@ public class CrearRecetaActivity extends AppCompatActivity {
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_crearReceta);
         setSupportActionBar(toolbar);
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(true);
+        actionBar.setHomeButtonEnabled(true);
+
+        drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        mToggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.open_dl, R.string.close_dl);
+        drawerLayout.addDrawerListener(mToggle);
+        mToggle.syncState();
 
         campoMedicamento = (EditText) findViewById(R.id.campoMedicamento);
         campoDiagnostico = (EditText) findViewById(R.id.campoDiagnostico);
@@ -68,12 +80,14 @@ public class CrearRecetaActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_crear_receta, menu);
         ActionBar actionBar = getSupportActionBar();
-        actionBar.setDisplayHomeAsUpEnabled(true);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        if (mToggle.onOptionsItemSelected(item)) {
+            return true;
+        }
         int id = item.getItemId();
 
         switch (id) {

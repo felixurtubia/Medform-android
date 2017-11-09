@@ -4,7 +4,9 @@ package cl.tello_urtubia.medform;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -24,6 +26,8 @@ public  class EditarPacienteActivity extends AppCompatActivity{
     Spinner spinner;
     String sexo;
     EditText campoNombre, campoRut, campoFecha, campoDireccion ;
+    private DrawerLayout drawerLayout;
+    private ActionBarDrawerToggle mToggle;
 
 
     @Override
@@ -36,6 +40,14 @@ public  class EditarPacienteActivity extends AppCompatActivity{
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_editarPaciente);
         setSupportActionBar(toolbar);
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(true);
+        actionBar.setHomeButtonEnabled(true);
+
+        drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        mToggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.open_dl, R.string.close_dl);
+        drawerLayout.addDrawerListener(mToggle);
+        mToggle.syncState();
 
 
         spinner = (Spinner) findViewById(R.id.crearPaciente_spinnerSexo);
@@ -71,12 +83,14 @@ public  class EditarPacienteActivity extends AppCompatActivity{
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_inicio, menu);
         ActionBar actionBar = getSupportActionBar();
-        actionBar.setDisplayHomeAsUpEnabled(true);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        if (mToggle.onOptionsItemSelected(item)) {
+            return true;
+        }
         int id = item.getItemId();
 
         switch (id) {

@@ -6,53 +6,100 @@ import android.database.sqlite.SQLiteDatabase;
 import android.icu.text.SimpleDateFormat;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 
+import cl.tello_urtubia.medform.Entidades.Paciente;
 import cl.tello_urtubia.medform.Utilidades.Utilidades;
 
 public class MainActivity extends AppCompatActivity {
 
-    EditText campoRut;
+    ListView listViewpacientes;
+    ArrayList<Paciente> listaPaciente;
+    ArrayList<String> listaInfo;
     ConexionSQLHelper conn;
+    EditText campoRut;
+    private DrawerLayout drawerLayout;
+    private ActionBarDrawerToggle mToggle;
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        // Action bar y drawer layout
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(true);
+        actionBar.setHomeButtonEnabled(true);
+
+        drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        mToggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.open_dl, R.string.close_dl);
+        drawerLayout.addDrawerListener(mToggle);
+        mToggle.syncState();
+
+
+
 
 
         conn = new ConexionSQLHelper(getApplicationContext(), "bd_pacientes", null, 1);
+        listViewpacientes = (ListView) findViewById(R.id.listViewPacientes);
 
-        campoRut = (EditText) findViewById(R.id.main_RutPaciente_et);
+        consultarListaPacientes();
+
+        ArrayAdapter adaptador = new ArrayAdapter(this, android.R.layout.simple_expandable_list_item_1,listaInfo);
+        listViewpacientes.setAdapter(adaptador);
+
+        listViewpacientes.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int pos, long id) {
+
+                Intent intent = new Intent();
+
+                intent.setClass(getApplicationContext(), DatosPacienteActivity.class);
+                intent.putExtra("nombre", listaPaciente.get(pos).getNombre());
+                intent.putExtra("rut", listaPaciente.get(pos).getRut());
+                intent.putExtra("sexo", listaPaciente.get(pos).getSexo());
+                intent.putExtra("fecha", listaPaciente.get(pos).getFecha());
+                intent.putExtra("direccion", listaPaciente.get(pos).getDireccion());
+
+                startActivity(intent);
+
+            }
+        });
         
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_inicio, menu);
+        getMenuInflater().inflate(R.menu.menu_lista_pacientes, menu);
         ActionBar actionBar = getSupportActionBar();
-        actionBar.setHomeButtonEnabled(true);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        if (mToggle.onOptionsItemSelected(item)) {
+            return true;
+        }
         int id = item.getItemId();
         switch (id) {
             case R.id.action_user_settings:
@@ -69,64 +116,39 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public void inicioOptionsSelected(View view) {
-        Button boton = (Button) view;
-        int id = boton.getId();
-        Intent intent = new Intent();
-        switch (id) {
-            case R.id.buscar_paciente_button:
-                consultar();
-                break;
+    private void consultarListaPacientes() {
+        SQLiteDatabase db = conn.getReadableDatabase() ;
 
-            case R.id.historial_recetas_button:
-                intent.setClass(this, HistorialRecetasActivity.class);
-                startActivity(intent);
-                break;
+        Paciente paciente = null;
+        listaPaciente = new ArrayList<Paciente>();
+        Cursor cursor = db.rawQuery("SELECT * FROM "+ Utilidades.TABLA_PACIENTE, null);
 
-            case R.id.lista_pacientes_button:
-                intent.setClass(this, ListaPacientesActivity.class);
-                startActivity(intent);
-                break;
-            default:
-                break;
+        while (cursor.moveToNext()) {
+            paciente = new Paciente();
+            paciente.setNombre(cursor.getString(1));
+            paciente.setRut(cursor.getString(2));
+            paciente.setFecha(cursor.getString(3));
+            paciente.setSexo(cursor.getString(4));
+            paciente.setDireccion(cursor.getString(5));
+
+            listaPaciente.add(paciente);
         }
 
+        obtenerLista();
+
+        cursor.close();
+        db.close();
 
     }
 
-    private void consultar() {
+    private void obtenerLista() {
 
-        Intent intent = new Intent();
-        SQLiteDatabase db = conn.getReadableDatabase();
-        String[] parametros = {campoRut.getText().toString()};
+        listaInfo = new ArrayList<String>();
 
-        String[] campos = {Utilidades.CAMPO_NOMBRE, Utilidades.CAMPO_RUT, Utilidades.CAMPO_SEXO, Utilidades.CAMPO_DIRECCION};
-
-        try {
-            //Cursor cursor = db.query(Utilidades.TABLA_PACIENTE,campos, Utilidades.CAMPO_RUT+"=?", parametros , null, null, null);
-            Cursor cursor = db.rawQuery("SELECT nombre,rut,sexo,fecnac,direccion FROM paciente WHERE rut =?", parametros);
-            cursor.moveToFirst();
-            intent.setClass(this, DatosPacienteActivity.class);
-            intent.putExtra("nombre", cursor.getString(0) + "");
-            intent.putExtra("rut", cursor.getString(1) + "");
-            intent.putExtra("sexo", cursor.getString(2) + "");
-            intent.putExtra("fecha", cursor.getString(3) + "");
-            intent.putExtra("direccion", cursor.getShort(4) + "");
-            cursor.close();
-            Toast.makeText(getApplicationContext(), "PacienteEncontrado", Toast.LENGTH_LONG).show();
-            startActivity(intent); // Si existe el paciente, pasamos a la vista de mostrar los datos del paciente
-
-        } catch (Exception e) {
-            Toast.makeText(getApplicationContext(), "Paciente no encontrado", Toast.LENGTH_LONG).show();
-            intent.setClass(this, CrearPacienteActivity.class);
-            intent.putExtra("rut", campoRut.getText().toString());
-
-            startActivity(intent); // Si falla al buscar paciente, vamos a crear uno con el rut que se puso
-
+        for (int i =0; i<listaPaciente.size(); i++){
+            listaInfo.add(listaPaciente.get(i).getRut()+" - "+ listaPaciente.get(i).getNombre());
 
         }
-
-
     }
 
 }
