@@ -3,6 +3,7 @@ package cl.tello_urtubia.medform;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Canvas;
@@ -263,16 +264,20 @@ public class DatosRecetaActivity extends AppCompatActivity {
             Canvas canvas = page.getCanvas();
 
             pagenumber++; // Make sure page numbers start at 1
-
+            SharedPreferences prefs = getSharedPreferences(getString(R.string.preferencias_medico), MODE_PRIVATE);
+            String nombre_medico =prefs.getString("nombre", null);
+            String rut_medico =prefs.getString("rut", null);
+            String titulo_medico =prefs.getString("titulo", null);
+            String direccion_medico =prefs.getString("direccion", null);
 
             Paint paint = new Paint();
             paint.setColor(Color.BLACK);
             paint.setTextSize(20);
-            canvas.drawText("Dr/a Nombre del Doctor ",350, 50, paint);
+            canvas.drawText("Dr/a "+nombre_medico,350, 50, paint);
             paint.setTextSize(15);
-            canvas.drawText("Titulo Medico", 450, 75, paint);
-            canvas.drawText("RUT 9.999.999-9", 450, 95, paint);
-            canvas.drawText("Dirección Consulta", 450, 115, paint);
+            canvas.drawText(titulo_medico, 450, 75, paint);
+            canvas.drawText("RUT "+rut_medico, 450, 95, paint);
+            canvas.drawText(direccion_medico, 450, 115, paint);
 
             paint.setStrokeWidth(1);
             paint.setStyle(Paint.Style.STROKE);
