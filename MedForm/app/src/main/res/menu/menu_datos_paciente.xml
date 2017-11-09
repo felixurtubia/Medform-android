@@ -8,39 +8,17 @@
         android:orderInCategory="1"
         android:title="@string/action_nueva_receta" />
 
-    <group
-        android:id="@+id/action_group_paciente">
-        <item
-            android:id="@+id/action_editar_paciente"
-            android:icon="@drawable/ic_edit_black_24dp"
-            android:orderInCategory="1"
-            android:title="@string/action_editar_paciente"
-            app:showAsAction="ifRoom"/>
-        <item
-            android:id="@+id/action_eliminar_paciente"
-            android:icon="@drawable/ic_delete_black_24dp"
-            android:orderInCategory="1"
-            android:title="@string/action_eliminar_paciente"
-            app:showAsAction="ifRoom"/>
-    </group>
-
-
-    <group
-        android:id="@+id/action_group_settings">
-        <item
-            android:id="@+id/action_user_settings"
-            android:icon="@drawable/ic_account_box_black_24dp"
-            android:orderInCategory="1"
-            android:title="@string/action_user_settings"
-            app:showAsAction="never" />
-        <item
-            android:id="@+id/action_settings"
-            android:icon="@drawable/ic_settings_black_24dp"
-            android:orderInCategory="2"
-            android:title="@string/action_settings"
-            app:showAsAction="never" />
-
-    </group>
-
+    <item
+        android:id="@+id/action_editar_paciente"
+        android:icon="@drawable/ic_edit_black_24dp"
+        android:orderInCategory="1"
+        android:title="@string/action_editar_paciente"
+        app:showAsAction="ifRoom"/>
+    <item
+        android:id="@+id/action_eliminar_paciente"
+        android:icon="@drawable/ic_delete_black_24dp"
+        android:orderInCategory="1"
+        android:title="@string/action_eliminar_paciente"
+        app:showAsAction="ifRoom"/>
 
 </menu>

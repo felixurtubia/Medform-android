@@ -2,7 +2,12 @@ package cl.tello_urtubia.medform;
 
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
+import android.support.annotation.NonNull;
+import android.support.design.widget.NavigationView;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -16,9 +21,10 @@ import android.widget.Toast;
 
 import cl.tello_urtubia.medform.Utilidades.Utilidades;
 
-public class DatosPacienteActivity extends AppCompatActivity {
+public class DatosPacienteActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
-
+    private DrawerLayout drawerLayout;
+    private ActionBarDrawerToggle mToggle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,6 +35,16 @@ public class DatosPacienteActivity extends AppCompatActivity {
         setContentView(R.layout.activity_datos_paciente);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_datospaciente);
         setSupportActionBar(toolbar);
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(true);
+        actionBar.setHomeButtonEnabled(true);
+
+        drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        mToggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.open_dl, R.string.close_dl);
+        drawerLayout.addDrawerListener(mToggle);
+        mToggle.syncState();
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
 
         String nombre = getIntent().getStringExtra("nombre");
         String rut = getIntent().getStringExtra("rut");
@@ -53,12 +69,14 @@ public class DatosPacienteActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_datos_paciente, menu);
         ActionBar actionBar = getSupportActionBar();
-        actionBar.setDisplayHomeAsUpEnabled(true);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        if (mToggle.onOptionsItemSelected(item)) {
+            return true;
+        }
         int id = item.getItemId();
 
         switch (id) {
@@ -147,5 +165,32 @@ public class DatosPacienteActivity extends AppCompatActivity {
 
         startActivity(intent);
 
+    }
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        int id = item.getItemId();
+        Intent intent = null;
+        if (id == R.id.nav_lista_pacientes) {
+            intent = new Intent(this, MainActivity.class);
+            startActivity(intent);
+            return true;
+        } else if (id == R.id.nav_historial_recetas) {
+            intent = new Intent(this, HistorialRecetasActivity.class);
+            startActivity(intent);
+            return true;
+
+        } else if (id == R.id.nav_datos_medico) {
+            /**intent = new Intent(this, DatosMedico.class);
+             startActivity(intent);**/
+
+        } else if (id == R.id.nav_ajustes) {
+            /**intent = new intent(this, Ajustes.class);
+             startActivity(intent);**/
+
+        }
+
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawer.closeDrawer(GravityCompat.START);
+        return true;
     }
 }
