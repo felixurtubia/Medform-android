@@ -3,6 +3,7 @@ package cl.tello_urtubia.medform;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.icu.text.SimpleDateFormat;
@@ -20,6 +21,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -104,6 +106,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
             }
         });
+
+        SharedPreferences sharedPref = getSharedPreferences(getString(R.string.preferencias_medico),MODE_PRIVATE);
+        if (!sharedPref.contains(getString(R.string.nombre_medico)) ||!sharedPref.contains(getString(R.string.rut_medico))){
+            Intent crear_medico = new Intent(this, CrearMedicoActivity.class);
+            startActivity(crear_medico);
+        }
+
+
+
+
     }
 
     @Override
@@ -179,7 +191,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         }
     }**/
-
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();

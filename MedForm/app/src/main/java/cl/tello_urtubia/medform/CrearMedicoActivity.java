@@ -1,7 +1,8 @@
 package cl.tello_urtubia.medform;
 
-import android.content.ContentValues;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteDatabase;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
@@ -12,6 +13,7 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -19,24 +21,21 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import cl.tello_urtubia.medform.Utilidades.Utilidades;
 
-public class CrearPacienteActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+public class CrearMedicoActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
-    EditText campoNombre, campoRut, campoFecha, campoDireccion ;
-    String sexo;
-    Spinner spinner;
+    EditText campoNombre, campoRut, campoTitulo, campoDireccion ;
     private DrawerLayout drawerLayout;
     private ActionBarDrawerToggle mToggle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_crear_paciente);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_crearPaciente);
+        setContentView(R.layout.activity_crear_medico);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_crearMedico);
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
@@ -50,32 +49,13 @@ public class CrearPacienteActivity extends AppCompatActivity implements Navigati
         navigationView.setNavigationItemSelectedListener(this);
 
 
-        //String rut = getIntent().getStringExtra("rut");
-        campoRut = (EditText) findViewById(R.id.campoRut);
-        //campoRut.setText(rut);
-        spinner = (Spinner) findViewById(R.id.crearPaciente_spinnerSexo);
-
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(
-                this, R.array.sexo_paciente, android.R.layout.simple_spinner_item);
-
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinner.setAdapter(adapter);
-
-        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
-                sexo = parent.getItemAtPosition(pos).toString();
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
-
-            }
-        });
-
         campoNombre = (EditText) findViewById(R.id.campoNombre);
-        campoFecha = (EditText) findViewById(R.id.campoFecha);
+        campoTitulo = (EditText) findViewById(R.id.campoTitulo);
         campoDireccion = (EditText) findViewById(R.id.campoDireccion);
+        campoRut = (EditText) findViewById(R.id.campoRut);
+        Toast toast = Toast.makeText(getApplicationContext(), "Por favor ingresa tus datos para continuar con la aplicación", Toast.LENGTH_LONG);
+        toast.show();
+
 
     }
 
@@ -110,34 +90,24 @@ public class CrearPacienteActivity extends AppCompatActivity implements Navigati
     public void onClick (View view) {
         String nombre = campoNombre.getText().toString();
         String rut = campoRut.getText().toString();
-        String fecha = campoFecha.getText().toString();
+        String titulo = campoTitulo.getText().toString();
         String direccion = campoDireccion.getText().toString();
-        registrarPacientesSQL(nombre, rut, fecha, sexo, direccion);
 
-        Intent intent = new Intent(this, DatosPacienteActivity.class);
-        intent.putExtra("rut", rut);
-        intent.putExtra("nombre", nombre);
-        intent.putExtra("sexo", sexo);
-        intent.putExtra("fecha", fecha);
-        intent.putExtra("direccion", direccion);
-        startActivity(intent);
+        SharedPreferences.Editor editor = getSharedPreferences(getString(R.string.preferencias_medico),MODE_PRIVATE).edit();
+        editor.putString(getString(R.string.nombre_medico), nombre);
+        editor.putString(getString(R.string.rut_medico), rut);
+        editor.putString(getString(R.string.titulo_medico), titulo);
+        editor.putString(getString(R.string.direccion_medico), direccion);
+        editor.commit();
+        //SharedPreferences sharedPref = getSharedPreferences(getString(R.string.preferencias_medico),MODE_PRIVATE);
+        //Log.d("OPCIONESSSSS",sharedPref.getAll().toString());
+        Toast toast = Toast.makeText(getApplicationContext(), "Sus datos han sido guardados", Toast.LENGTH_LONG);
+        toast.show();
+        Intent al_inicio = new Intent(this, MainActivity.class);
+        startActivity(al_inicio);
+
     }
 
-    private void registrarPacientesSQL(String nombre, String rut, String fecha, String sexo, String direccion) {
-        ConexionSQLHelper conn = new ConexionSQLHelper(this, "bd_pacientes", null, 1);
-
-        SQLiteDatabase db = conn.getWritableDatabase();
-
-        String insertR = "INSERT INTO "+Utilidades.TABLA_PACIENTE+" ( "+Utilidades.CAMPO_NOMBRE+","
-                +Utilidades.CAMPO_RUT+","+Utilidades.CAMPO_FECHA+","+Utilidades.CAMPO_SEXO+","+Utilidades.CAMPO_DIRECCION+")"
-                + "VALUES ( '"+nombre+"', '"+rut+"', '" +fecha+"', '"+sexo+"', '"+direccion+"')" ;
-
-        db.execSQL(insertR);
-
-        Toast.makeText(getApplicationContext(), "Paciente Registrado", Toast.LENGTH_SHORT).show();
-
-        db.close();
-    }
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
@@ -165,7 +135,5 @@ public class CrearPacienteActivity extends AppCompatActivity implements Navigati
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
-
-
 
 }

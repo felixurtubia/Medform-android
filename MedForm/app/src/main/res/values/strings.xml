@@ -46,10 +46,20 @@
     <string name="close_dl">Close</string>
     <string name="search_hint">Nombre o rut del paciente</string>
 
+    <string name="nombre_medico">nombre</string>
+    <string name="titulo_medico">titulo</string>
+    <string name="rut_medico">rut</string>
+    <string name="direccion_medico">direccion</string>
+
 
     <string-array name="sexo_paciente">
         <item>Femenino</item>
         <item>Masculino</item>
     </string-array>
     <string name="title_activity_searchable">SearchableActivity</string>
+    <string name="creaMedico_Nombre">Nombre:</string>
+    <string name="crearMedico_rut">Rut:</string>
+    <string name="crearMedico_titulo">Título:</string>
+    <string name="creaMedico_direccion">Dirección de oficina:</string>
+    <string name="preferencias_medico">sp_medico</string>
 </resources>
