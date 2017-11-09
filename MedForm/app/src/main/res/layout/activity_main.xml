@@ -23,7 +23,8 @@
                 android:background="?attr/colorPrimary"
                 android:elevation="4dp"
                 android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
-                app:popupTheme="@style/AppTheme.PopupOverlay" />
+                app:popupTheme="@style/AppTheme.PopupOverlay"
+                android:title="Lista de Pacientes"/>
 
             <ListView
                 android:id="@+id/listViewPacientes"
