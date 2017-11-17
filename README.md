@@ -1,23 +1,16 @@
 ﻿# MedForm
 
-*Integrantes*
+*Desarrolladores*
 
 * José Tello V.
 * Felix Urtubia
 
-Avance: 12 de Octubre
+Aplicación Enfocada a la interacción entre medicos o profesionales de la salud y pacientes que necesiten realizar recetas médicas de una forma eficaz y optima.
 
-Fecha Final: 2 de Noviembre
+La aplicación contempla:
 
+* Registro, Edición y Borrar Pacientes.
+* Creación de Recetas entorno a un Paciente. 
 
-Vista por revisar:
-
-* Editar Paciente: Falta el toolbar arriba. 
-
-* Lista Paciente: Falta el toolbar arriba.
-
-* Main: Podrias centrar el boton de listar pacientes e historial de recetas, me descontra que no esten simetricos xDD
-
-* Datos Paciente: Podrias poner bien donde se ponen los datos, onda sale Rut paciente pero abajo sale el rut, sexo y fecha desordenado :C 
-
+De esta manera, se busca resolver la problematica que muchas veces no es tan legible el texto de las recetas o que se realizan muchas recetas en un solo día y es una carga grande para el médico. 
 
